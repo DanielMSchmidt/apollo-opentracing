@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo, DocumentNode } from "graphql";
 import { GraphQLExtension } from "graphql-extensions";
-import { Tracer } from "opentracing";
+import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
 
 interface InitOptions {
@@ -17,19 +17,20 @@ interface RequestStart {
   persistedQueryHit?: boolean;
   persistedQueryRegister?: boolean;
 }
-
-export default class OpentracingExtension<TContext = any>
+interface SpanContext {
+  span?: Span;
+}
+export default class OpentracingExtension<TContext extends SpanContext>
   implements GraphQLExtension<TContext> {
   private serverTracer: Tracer;
-  // private localTracer: Tracer;
-  // private requestSpan: Span | null;
+  private localTracer: Tracer;
+  private requestSpan: Span | null;
 
-  constructor({ server }: InitOptions) {
-    console.log("New Extension initialized");
+  constructor({ server, local }: InitOptions) {
     // TODO: check for server and local to be present and use smarter defaults
     this.serverTracer = server;
-    // this.localTracer = local;
-    // this.requestSpan = null;
+    this.localTracer = local;
+    this.requestSpan = null;
   }
 
   requestDidStart(infos: RequestStart) {
@@ -37,7 +38,7 @@ export default class OpentracingExtension<TContext = any>
     rootSpan.log({
       queryString: infos.queryString
     });
-    // this.requestSpan = rootSpan;
+    this.requestSpan = rootSpan;
 
     return () => {
       rootSpan.finish();
@@ -45,15 +46,20 @@ export default class OpentracingExtension<TContext = any>
   }
 
   willResolveField(
-    source: any,
-    args: { [argName: string]: any },
+    _source: any,
+    _args: { [argName: string]: any },
     context: TContext,
     info: GraphQLResolveInfo
   ) {
-    console.log("field start", source, args, context, info);
+    const name = info.fieldName;
+    const parentSpan = context.span ? context.span : this.requestSpan;
+    const span = this.localTracer.startSpan(name, {
+      childOf: parentSpan || undefined
+    });
 
     return (error: Error | null, result: any) => {
-      console.log("field end", error, result);
+      span.log({ error, result });
+      span.finish();
     };
   }
 }
