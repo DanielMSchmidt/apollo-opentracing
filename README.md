@@ -1,5 +1,10 @@
 # apollo-opentracing
 
+- 🚀 Request & Field level resolvers are traced out of the box
+- 🔧 Use the opentracing compatible tracer you like
+  - [jaeger](https://www.jaegertracing.io/)
+  - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
+
 ## Installation
 
 Run `npm install --save apollo-opentracing` given that you already setup an opentracing tracer accordingly
@@ -27,3 +32,12 @@ app.use(
   })
 )
 ```
+
+## Connecting Services
+
+![example image](demo.png)
+
+To connect other services you need to use the opentracing [inject](http://opentracing.io/documentation/pages/api/cross-process-tracing.html) function of your tracer.
+We pass the current span down to your resolvers as `context.span`, so you should use it.
+
+You can also make use of it and add new logs or tags on the fly if you like.
