@@ -51,11 +51,14 @@ export default class OpentracingExtension<TContext extends SpanContext>
     context: TContext,
     info: GraphQLResolveInfo
   ) {
-    const name = info.fieldName;
+    const name = info.fieldName || "field";
     const parentSpan = context.span ? context.span : this.requestSpan;
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined
     });
+
+    // TODO: check if I can mutate the context
+    context.span = span;
 
     return (error: Error | null, result: any) => {
       span.log({ error, result });
