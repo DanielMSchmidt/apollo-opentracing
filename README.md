@@ -20,7 +20,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress({
     schema,
-+   extensions: [new OpentracingExtension({
++   extensions: [() => new OpentracingExtension({
 +     server: serverTracer,
 +     local: localTracer,
 +   })]

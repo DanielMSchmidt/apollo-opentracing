@@ -20,24 +20,37 @@ interface RequestStart {
 
 export default class OpentracingExtension<TContext = any>
   implements GraphQLExtension<TContext> {
-  constructor(_options: InitOptions) {
+  private serverTracer: Tracer;
+  // private localTracer: Tracer;
+  // private requestSpan: Span | null;
+
+  constructor({ server }: InitOptions) {
+    console.log("New Extension initialized");
     // TODO: check for server and local to be present and use smarter defaults
+    this.serverTracer = server;
+    // this.localTracer = local;
+    // this.requestSpan = null;
   }
 
   requestDidStart(infos: RequestStart) {
-    console.log("start", infos);
+    const rootSpan = this.serverTracer.startSpan("request");
+    rootSpan.log({
+      queryString: infos.queryString
+    });
+    // this.requestSpan = rootSpan;
+
     return () => {
-      console.log("end");
+      rootSpan.finish();
     };
   }
 
   willResolveField(
     source: any,
     args: { [argName: string]: any },
-    _context: TContext,
-    _info: GraphQLResolveInfo
+    context: TContext,
+    info: GraphQLResolveInfo
   ) {
-    console.log("field start", source, args);
+    console.log("field start", source, args, context, info);
 
     return (error: Error | null, result: any) => {
       console.log("field end", error, result);
