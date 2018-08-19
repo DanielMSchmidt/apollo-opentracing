@@ -54,6 +54,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     const name = info.fieldName || "field";
     const parentSpan = context.span ? context.span : this.requestSpan;
     console.log("field", name, parentSpan);
+
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined
     });
@@ -62,7 +63,12 @@ export default class OpentracingExtension<TContext extends SpanContext>
     context.span = span;
 
     return (error: Error | null, result: any) => {
-      span.log({ error, result });
+      if (error) {
+        span.log({ error });
+      }
+      if (result) {
+        span.log({ result });
+      }
       span.finish();
     };
   }
