@@ -18,29 +18,29 @@ interface RequestStart {
   persistedQueryRegister?: boolean;
 }
 
-export default function extensionGenerator({  }: InitOptions) {
-  // TODO: check for server and local to be present and use smarter defaults
+export default class OpentracingExtension<TContext = any>
+  implements GraphQLExtension<TContext> {
+  constructor(_options: InitOptions) {
+    // TODO: check for server and local to be present and use smarter defaults
+  }
 
-  return class OpentracingExtension<TContext = any>
-    implements GraphQLExtension<TContext> {
-    requestDidStart(infos: RequestStart) {
-      console.log("start", infos);
-      return () => {
-        console.log("end");
-      };
-    }
+  requestDidStart(infos: RequestStart) {
+    console.log("start", infos);
+    return () => {
+      console.log("end");
+    };
+  }
 
-    willResolveField(
-      source: any,
-      args: { [argName: string]: any },
-      _context: TContext,
-      _info: GraphQLResolveInfo
-    ) {
-      console.log("field start", source, args);
+  willResolveField(
+    source: any,
+    args: { [argName: string]: any },
+    _context: TContext,
+    _info: GraphQLResolveInfo
+  ) {
+    console.log("field start", source, args);
 
-      return (error: Error | null, result: any) => {
-        console.log("field end", error, result);
-      };
-    }
-  };
+    return (error: Error | null, result: any) => {
+      console.log("field end", error, result);
+    };
+  }
 }

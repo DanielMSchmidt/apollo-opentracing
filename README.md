@@ -12,7 +12,7 @@ We need three types of tracer (which could be identical if you like):
 - local: Used to start every other span
 
 ```diff
-+const opentracingExtension = require("apollo-opentracing");
++const OpentracingExtension = require("apollo-opentracing").default;
 const {serverTracer, localTracer} = require("./tracer);
 
 app.use(
@@ -20,7 +20,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress({
     schema,
-+   extensions: [opentracingExtension({
++   extensions: [new OpentracingExtension({
 +     server: serverTracer,
 +     local: localTracer,
 +   })]
