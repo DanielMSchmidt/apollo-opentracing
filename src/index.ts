@@ -63,10 +63,10 @@ export default class OpentracingExtension<TContext extends SpanContext>
 
     return (error: Error | null, result: any) => {
       if (error) {
-        span.log({ error });
+        span.log({ error: JSON.stringify(error) });
       }
       if (result) {
-        span.log({ result });
+        span.log({ result: JSON.stringify(result) });
       }
       span.finish();
     };
