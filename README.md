@@ -46,7 +46,5 @@ You can also make use of it and add new logs or tags on the fly if you like.
 
 ## Contributing
 
-Please feel free to add issues with new ideas, bugs and anything that might come up. 
-Let's make performance measurement to everyone <3 
-
-
+Please feel free to add issues with new ideas, bugs and anything that might come up.
+Let's make performance measurement to everyone <3
