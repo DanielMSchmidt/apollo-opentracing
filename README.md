@@ -7,7 +7,7 @@
 
 ## Installation
 
-Run `npm install --save apollo-opentracing` given that you already setup an opentracing tracer accordingly
+Run `npm install --save apollo-opentracing` given that you already setup an opentracing tracer accordingly.
 
 ## Setup
 
@@ -41,3 +41,10 @@ To connect other services you need to use the opentracing [inject](http://opentr
 We pass the current span down to your resolvers as `context.span`, so you should use it.
 
 You can also make use of it and add new logs or tags on the fly if you like.
+
+## Contributing
+
+Please feel free to add issues with new ideas, bugs and anything that might come up. 
+Let's make performance measurement to everyone <3 
+
+
