@@ -1,6 +1,7 @@
 # apollo-opentracing [![Build Status](https://travis-ci.com/DanielMSchmidt/graphql-performance-tracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/graphql-performance-tracing)
 
 - 🚀 Request & Field level resolvers are traced out of the box
+- 🔍 Queries and results are logged, to make debugging easier
 - 🔧 Use the opentracing compatible tracer you like, e.g.
   - [jaeger](https://www.jaegertracing.io/)
   - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
