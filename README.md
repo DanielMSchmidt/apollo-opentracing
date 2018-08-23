@@ -1,4 +1,4 @@
-# apollo-opentracing
+# apollo-opentracing [![Build Status](https://travis-ci.com/DanielMSchmidt/graphql-performance-tracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/graphql-performance-tracing)
 
 - 🚀 Request & Field level resolvers are traced out of the box
 - 🔧 Use the opentracing compatible tracer you like, e.g.
