@@ -17,18 +17,53 @@
 		}
 	},
 	"jest": {
-		"transform": {
-			"^.+\\.tsx?$": "ts-jest"
-		},
-		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-		"moduleFileExtensions": [
-			"ts",
-			"tsx",
-			"js",
-			"jsx",
-			"json",
-			"node"
-		]
+    "projects": [
+      {
+        "displayName": "unit",
+        "transform": {
+          "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "moduleFileExtensions": [
+          "ts",
+          "tsx",
+          "js",
+          "jsx",
+          "json",
+          "node"
+        ]
+      },
+      {
+        "displayName": "Prettier",
+        "runner": "jest-runner-prettier",
+        "moduleFileExtensions": [
+          "js",
+          "jsx",
+          "json",
+          "ts",
+          "tsx",
+          "css",
+          "less",
+          "scss",
+          "graphql",
+          "md",
+          "markdown"
+        ],
+        "testMatch": [
+          "**/*.js",
+          "**/*.jsx",
+          "**/*.json",
+          "**/*.ts",
+          "**/*.tsx",
+          "**/*.css",
+          "**/*.less",
+          "**/*.scss",
+          "**/*.graphql",
+          "**/*.md",
+          "**/*.markdown"
+        ]
+      }
+    ]
 	},
 	"repository": "DanielMSchmidt/apollo-opentracing",
 	"author": "Daniel Schmidt <danielmschmidt92@gmail.com>",
@@ -49,6 +84,7 @@
 		"graphql": "0.13.2",
 		"husky": "^1.0.0-rc.13",
 		"jest": "23.5.0",
+		"jest-runner-prettier": "^0.2.6",
 		"opentracing": "0.14.3",
 		"precise-commits": "^1.0.2",
 		"prettier": "^1.14.2",
