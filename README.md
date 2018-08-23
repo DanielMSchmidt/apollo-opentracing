@@ -1,7 +1,7 @@
 # apollo-opentracing
 
 - 🚀 Request & Field level resolvers are traced out of the box
-- 🔧 Use the opentracing compatible tracer you like
+- 🔧 Use the opentracing compatible tracer you like, e.g.
   - [jaeger](https://www.jaegertracing.io/)
   - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
 
