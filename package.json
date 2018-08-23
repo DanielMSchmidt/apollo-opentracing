@@ -1,6 +1,6 @@
 {
   "name": "apollo-opentracing",
-  "version": "0.1.1",
+  "version": "0.0.0-development",
   "description": "Trace your GraphQL server with Opentracing",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -8,7 +8,9 @@
     "clean": "rm -rf dist",
     "compile": "tsc",
     "prepare": "npm run clean && npm run compile",
-    "test": "jest"
+    "test": "jest",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "jest": {
     "transform": {
@@ -44,6 +46,8 @@
     "jest": "23.5.0",
     "opentracing": "0.14.3",
     "ts-jest": "23.1.4",
-    "typescript": "3.0.1"
+    "typescript": "3.0.1",
+    "semantic-release": "^15.9.9",
+    "travis-deploy-once": "^5.0.2"
   }
 }
