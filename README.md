@@ -5,6 +5,7 @@
 - 🔧 Use the opentracing compatible tracer you like, e.g.
   - [jaeger](https://www.jaegertracing.io/)
   - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
+- 🦖 Support from node 6 on
 
 ## Installation
 
