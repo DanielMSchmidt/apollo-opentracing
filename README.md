@@ -1,4 +1,4 @@
-# apollo-opentracing [![Build Status](https://travis-ci.com/DanielMSchmidt/apollo-opentracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/apollo-opentracing)
+# apollo-opentracing [![npm version](https://badge.fury.io/js/apollo-opentracing.svg)](https://badge.fury.io/js/apollo-opentracing) [![Build Status](https://travis-ci.com/DanielMSchmidt/apollo-opentracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/apollo-opentracing)
 
 - 🚀 Request & Field level resolvers are traced out of the box
 - 🔍 Queries and results are logged, to make debugging easier
