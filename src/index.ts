@@ -4,8 +4,8 @@ import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
 
 interface InitOptions {
-  server: Tracer;
-  local: Tracer;
+  server?: Tracer;
+  local?: Tracer;
 }
 
 interface RequestStart {
@@ -26,8 +26,19 @@ export default class OpentracingExtension<TContext extends SpanContext>
   private localTracer: Tracer;
   private requestSpan: Span | null;
 
-  constructor({ server, local }: InitOptions) {
-    // TODO: check for server and local to be present and use smarter defaults
+  constructor({ server, local }: InitOptions = {}) {
+    if (!server) {
+      throw new Error(
+        "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
+      );
+    }
+
+    if (!local) {
+      throw new Error(
+        "ApolloOpentracing needs a local tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
+      );
+    }
+
     this.serverTracer = server;
     this.localTracer = local;
     this.requestSpan = null;
