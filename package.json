@@ -48,6 +48,6 @@
     "ts-jest": "23.1.4",
     "typescript": "3.0.3",
     "semantic-release": "15.9.12",
-    "travis-deploy-once": "5.0.6"
+    "travis-deploy-once": "5.0.7"
   }
 }
