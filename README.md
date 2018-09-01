@@ -56,6 +56,11 @@ When you don't start the span for the request the field resolvers will also not 
 
 The function is called with the same properties as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
 
+## Roadmap
+
+- [ ] Extending spans coming from child systems (explicitly over the HTTP Headers)
+- [ ] Per field resolver selection
+
 ## Contributing
 
 Please feel free to add issues with new ideas, bugs and anything that might come up.
