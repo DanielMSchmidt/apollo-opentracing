@@ -45,9 +45,18 @@ We pass the current span down to your resolvers as `context.span`, so you should
 
 You can also make use of it and add new logs or tags on the fly if you like.
 
+## Selective Tracing
+
+Sometimes you don't want to trace everything, so we provide ways to select if you want to start a span right now or not.
+
+### By Request
+
+If you construct the extension with `shouldTraceRequest` you get the option to opt-in or out on a request basis.
+When you don't start the span for the request the field resolvers will also not be used.
+
+The function is called with the same properties as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
+
 ## Contributing
 
-Please feel free to add issues with new ideas, bugs and anything that might come up. 
-Let's make performance measurement to everyone <3 
-
-
+Please feel free to add issues with new ideas, bugs and anything that might come up.
+Let's make performance measurement to everyone <3

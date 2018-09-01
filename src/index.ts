@@ -3,9 +3,12 @@ import { GraphQLExtension } from "graphql-extensions";
 import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
 
+const alwaysTrue = () => true;
+
 interface InitOptions {
   server?: Tracer;
   local?: Tracer;
+  shouldTraceRequest?: (info: RequestStart) => boolean;
 }
 
 interface RequestStart {
@@ -25,8 +28,9 @@ export default class OpentracingExtension<TContext extends SpanContext>
   private serverTracer: Tracer;
   private localTracer: Tracer;
   private requestSpan: Span | null;
+  private shouldTraceRequest: (info: RequestStart) => boolean;
 
-  constructor({ server, local }: InitOptions = {}) {
+  constructor({ server, local, shouldTraceRequest }: InitOptions = {}) {
     if (!server) {
       throw new Error(
         "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
@@ -42,9 +46,14 @@ export default class OpentracingExtension<TContext extends SpanContext>
     this.serverTracer = server;
     this.localTracer = local;
     this.requestSpan = null;
+    this.shouldTraceRequest = shouldTraceRequest || alwaysTrue;
   }
 
   requestDidStart(infos: RequestStart) {
+    if (!this.shouldTraceRequest(infos)) {
+      return;
+    }
+
     const rootSpan = this.serverTracer.startSpan("request");
     rootSpan.log({
       queryString: infos.queryString
@@ -62,6 +71,10 @@ export default class OpentracingExtension<TContext extends SpanContext>
     context: TContext,
     info: GraphQLResolveInfo
   ) {
+    if (!this.requestSpan) {
+      return;
+    }
+
     const name = info.fieldName || "field";
     const parentSpan = context.span ? context.span : this.requestSpan;
 
