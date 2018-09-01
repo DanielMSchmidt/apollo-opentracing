@@ -31,7 +31,7 @@
   "license": "MIT",
   "peerDependencies": {
     "apollo-server-env": "*",
-    "graphql": "0.10.x - 0.13.x",
+    "graphql": "0.10.x - 14.0.x",
     "opentracing": "*"
   },
   "dependencies": {
@@ -40,14 +40,14 @@
   "devDependencies": {
     "@types/graphql": "0.13.4",
     "@types/jest": "23.3.1",
-    "@types/node": "10.9.1",
+    "@types/node": "10.9.4",
     "apollo-server-env": "2.0.2",
-    "graphql": "0.13.2",
+    "graphql": "14.0.0",
     "jest": "23.5.0",
     "opentracing": "0.14.3",
     "ts-jest": "23.1.4",
-    "typescript": "3.0.1",
-    "semantic-release": "15.9.9",
-    "travis-deploy-once": "5.0.3"
+    "typescript": "3.0.3",
+    "semantic-release": "15.9.12",
+    "travis-deploy-once": "5.0.7"
   }
 }
