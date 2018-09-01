@@ -1,8 +1,8 @@
 # apollo-opentracing [![npm version](https://badge.fury.io/js/apollo-opentracing.svg)](https://badge.fury.io/js/apollo-opentracing) [![Build Status](https://travis-ci.com/DanielMSchmidt/apollo-opentracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/apollo-opentracing) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-
 - 🚀 Request & Field level resolvers are traced out of the box
 - 🔍 Queries and results are logged, to make debugging easier
+- ⚙️ Select which requests you want to trace
 - 🔧 Use the opentracing compatible tracer you like, e.g.
   - [jaeger](https://www.jaegertracing.io/)
   - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
