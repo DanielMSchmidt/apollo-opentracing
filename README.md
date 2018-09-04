@@ -61,10 +61,6 @@ The function is called with the same arguments as the `requestDidStart` function
 
 There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`.
 
-## Roadmap
-
-- [ ] Extending spans coming from child systems (explicitly over the HTTP Headers)
-
 ## Contributing
 
 Please feel free to add issues with new ideas, bugs and anything that might come up.

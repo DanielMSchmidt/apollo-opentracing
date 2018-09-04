@@ -1,3 +1,4 @@
+import * as opentracing from "opentracing";
 import { GraphQLResolveInfo, DocumentNode } from "graphql";
 import { GraphQLExtension } from "graphql-extensions";
 import { Tracer, Span } from "opentracing";
@@ -72,7 +73,18 @@ export default class OpentracingExtension<TContext extends SpanContext>
       return;
     }
 
-    const rootSpan = this.serverTracer.startSpan("request");
+    const externalSpan =
+      infos.request && infos.request.headers
+        ? this.serverTracer.extract(
+            opentracing.FORMAT_HTTP_HEADERS,
+            infos.request.headers
+          )
+        : undefined;
+
+    const rootSpan = this.serverTracer.startSpan("request", {
+      childOf: externalSpan ? externalSpan : undefined
+    });
+
     rootSpan.log({
       queryString: infos.queryString
     });
