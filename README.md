@@ -3,6 +3,7 @@
 - 🚀 Request & Field level resolvers are traced out of the box
 - 🔍 Queries and results are logged, to make debugging easier
 - ⚙️ Select which requests you want to trace
+- 🔗 Spans transmitted through the HTTP Headers are picked up
 - 🔧 Use the opentracing compatible tracer you like, e.g.
   - [jaeger](https://www.jaegertracing.io/)
   - [zipkin](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
