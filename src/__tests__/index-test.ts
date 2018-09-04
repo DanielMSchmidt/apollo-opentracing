@@ -107,6 +107,26 @@ describe("Apollo Tracing", () => {
       tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(server.startSpan).not.toHaveBeenCalled();
     });
+
+    it("picks up the tracing headers as parent span", () => {
+      server.extract.mockReturnValue({ spanId: 42 });
+      tracingMiddleware.requestDidStart({
+        queryString: "query {}",
+        request: {
+          headers: {
+            "X-B3-ParentSpanId": "a33c27ae31f3c9e9",
+            "X-B3-Sampled": 1,
+            "X-B3-SpanId": "42483bbd28a757b4",
+            "X-B3-TraceId": "a33c27ae31f3c9e9"
+          }
+        }
+      });
+
+      expect(server.extract).toHaveBeenCalled();
+      expect(server.startSpan).toHaveBeenCalledWith(expect.any(String), {
+        childOf: { spanId: 42 }
+      });
+    });
   });
 
   describe("field resolver", () => {
