@@ -20,8 +20,9 @@ We need three types of tracer (which could be identical if you like):
 - local: Used to start every other span
 
 ```diff
-+const OpentracingExtension = require("apollo-opentracing").default;
+const { graphqlExpress } = require("apollo-server-express");
 const {serverTracer, localTracer} = require("./tracer);
++const OpentracingExtension = require("apollo-opentracing").default;
 
 app.use(
   "/graphql",
