@@ -160,6 +160,30 @@ describe("Apollo Tracing", () => {
       expect(local.startSpan).not.toHaveBeenCalled();
     });
 
+    it("does not start a span if the predicate returns false", () => {
+      const shouldTraceFieldResolver = jest.fn().mockReturnValue(false);
+      tracingMiddleware = new ApolloOpentracing({
+        server,
+        local,
+        shouldTraceFieldResolver
+      });
+      tracingMiddleware.requestSpan = { id: "23" };
+      tracingMiddleware.willResolveField(
+        { a: true },
+        { b: true },
+        { c: true },
+        { d: true }
+      );
+
+      expect(local.startSpan).not.toHaveBeenCalled();
+      expect(shouldTraceFieldResolver).toHaveBeenCalledWith(
+        { a: true },
+        { b: true },
+        { c: true },
+        { d: true }
+      );
+    });
+
     it("adds the span to the context", () => {
       tracingMiddleware.requestSpan = { id: "23" };
       const ctx = {};

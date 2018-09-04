@@ -54,12 +54,15 @@ Sometimes you don't want to trace everything, so we provide ways to select if yo
 If you construct the extension with `shouldTraceRequest` you get the option to opt-in or out on a request basis.
 When you don't start the span for the request the field resolvers will also not be used.
 
-The function is called with the same properties as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
+The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
+
+### By Field
+
+There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`.
 
 ## Roadmap
 
 - [ ] Extending spans coming from child systems (explicitly over the HTTP Headers)
-- [ ] Per field resolver selection
 
 ## Contributing
 
