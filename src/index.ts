@@ -9,6 +9,12 @@ interface InitOptions {
   server?: Tracer;
   local?: Tracer;
   shouldTraceRequest?: (info: RequestStart) => boolean;
+  shouldTraceFieldResolver?: (
+    source: any,
+    args: { [argName: string]: any },
+    context: SpanContext,
+    info: GraphQLResolveInfo
+  ) => boolean;
 }
 
 interface RequestStart {
@@ -29,8 +35,19 @@ export default class OpentracingExtension<TContext extends SpanContext>
   private localTracer: Tracer;
   private requestSpan: Span | null;
   private shouldTraceRequest: (info: RequestStart) => boolean;
+  private shouldTraceFieldResolver: (
+    source: any,
+    args: { [argName: string]: any },
+    context: SpanContext,
+    info: GraphQLResolveInfo
+  ) => boolean;
 
-  constructor({ server, local, shouldTraceRequest }: InitOptions = {}) {
+  constructor({
+    server,
+    local,
+    shouldTraceRequest,
+    shouldTraceFieldResolver
+  }: InitOptions = {}) {
     if (!server) {
       throw new Error(
         "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
@@ -47,6 +64,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     this.localTracer = local;
     this.requestSpan = null;
     this.shouldTraceRequest = shouldTraceRequest || alwaysTrue;
+    this.shouldTraceFieldResolver = shouldTraceFieldResolver || alwaysTrue;
   }
 
   requestDidStart(infos: RequestStart) {
@@ -66,12 +84,15 @@ export default class OpentracingExtension<TContext extends SpanContext>
   }
 
   willResolveField(
-    _source: any,
-    _args: { [argName: string]: any },
+    source: any,
+    args: { [argName: string]: any },
     context: TContext,
     info: GraphQLResolveInfo
   ) {
-    if (!this.requestSpan) {
+    if (
+      !this.requestSpan ||
+      !this.shouldTraceFieldResolver(source, args, context, info)
+    ) {
       return;
     }
 
