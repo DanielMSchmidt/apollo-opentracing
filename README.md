@@ -15,7 +15,7 @@ Run `npm install --save apollo-opentracing` given that you already setup an open
 
 ## Setup
 
-We need three types of tracer (which could be identical if you like):
+We need two types of tracer (which could be identical if you like):
 
 - server: Only used for the root (the first span we will start)
 - local: Used to start every other span
