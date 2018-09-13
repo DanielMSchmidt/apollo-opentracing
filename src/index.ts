@@ -3,6 +3,7 @@ import { GraphQLResolveInfo, DocumentNode } from "graphql";
 import { GraphQLExtension } from "graphql-extensions";
 import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
+import { buildPath } from "./util";
 
 const alwaysTrue = () => true;
 
@@ -27,8 +28,9 @@ interface RequestStart {
   persistedQueryHit?: boolean;
   persistedQueryRegister?: boolean;
 }
-interface SpanContext {
-  span?: Span;
+export interface SpanContext {
+  getSpan(info: GraphQLResolveInfo): Span | undefined;
+  addSpan(span: Span, info: GraphQLResolveInfo): void;
 }
 export default class OpentracingExtension<TContext extends SpanContext>
   implements GraphQLExtension<TContext> {
@@ -109,14 +111,13 @@ export default class OpentracingExtension<TContext extends SpanContext>
     }
 
     const name = info.fieldName || "field";
-    const parentSpan = context.span ? context.span : this.requestSpan;
+    const parentSpan = this.requestSpan;
 
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined
     });
 
-    // There is no nicer way to change the span in the context
-    context.span = span;
+    context.addSpan(span, info);
 
     return (error: Error | null, result: any) => {
       if (error) {
