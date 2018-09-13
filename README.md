@@ -56,11 +56,13 @@ Sometimes you don't want to trace everything, so we provide ways to select if yo
 If you construct the extension with `shouldTraceRequest` you get the option to opt-in or out on a request basis.
 When you don't start the span for the request the field resolvers will also not be used.
 
-The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
+The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35). 
+
+When the request is not traced there will also be no traces of the field resolvers.
 
 ### By Field
 
-There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`.
+There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. To control if you want a field resolver to be traced you can pass the `shouldTraceFieldResolver` option to the constructor. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`. When you return false no traces will be made of this field resolvers.
 
 ## Contributing
 
