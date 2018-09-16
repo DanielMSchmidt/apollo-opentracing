@@ -9,6 +9,7 @@
     "compile": "tsc",
     "prepare": "npm run clean && npm run compile",
     "test": "jest",
+    "test:debug": "ndb ./node_modules/.bin/jest --runInBand",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once --pro"
   },
@@ -41,13 +42,14 @@
     "@types/graphql": "14.0.0",
     "@types/jest": "23.3.2",
     "@types/node": "10.9.4",
+    "apollo-server": "^2.0.7",
     "apollo-server-env": "2.0.3",
     "graphql": "14.0.2",
     "jest": "23.6.0",
     "opentracing": "0.14.3",
-    "ts-jest": "23.1.4",
-    "typescript": "3.0.3",
     "semantic-release": "15.9.15",
-    "travis-deploy-once": "5.0.7"
+    "travis-deploy-once": "5.0.7",
+    "ts-jest": "23.1.4",
+    "typescript": "3.0.3"
   }
 }
