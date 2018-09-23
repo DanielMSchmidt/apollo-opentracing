@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`integration with apollo-server correct span nesting 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [],
+              "finished": true,
+              "id": 7,
+              "logs": Array [
+                Object {
+                  "result": "\\"2\\"",
+                },
+              ],
+              "name": "two",
+              "options": Object {
+                "childOf": Object {
+                  "finish": [Function],
+                  "id": 6,
+                  "log": [Function],
+                  "name": "one",
+                },
+              },
+              "parentId": 6,
+            },
+          ],
+          "finished": true,
+          "id": 6,
+          "logs": Array [
+            Object {
+              "result": "\\"1\\"",
+            },
+          ],
+          "name": "one",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 5,
+              "log": [Function],
+              "name": "a",
+            },
+          },
+          "parentId": 5,
+        },
+      ],
+      "finished": true,
+      "id": 5,
+      "logs": Array [
+        Object {
+          "result": "{\\"one\\":\\"1\\",\\"two\\":\\"2\\",\\"three\\":[{\\"four\\":\\"4\\"},{\\"four\\":\\"IV\\"}]}",
+        },
+      ],
+      "name": "a",
+      "options": Object {
+        "childOf": Object {
+          "finish": [Function],
+          "id": 4,
+          "log": [Function],
+          "name": "request",
+        },
+      },
+      "parentId": 4,
+    },
+  ],
+  "finished": true,
+  "id": 4,
+  "logs": Array [
+    Object {
+      "queryString": "query {
+        a {
+          one
+          two
+        }
+      }",
+    },
+  ],
+  "name": "request",
+  "options": Object {
+    "childOf": undefined,
+  },
+  "parentId": undefined,
+}
+`;

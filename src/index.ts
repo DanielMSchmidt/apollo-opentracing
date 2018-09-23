@@ -115,6 +115,11 @@ export default class OpentracingExtension<TContext extends SpanContext>
       childOf: parentSpan || undefined
     });
 
+    // Added to expose bug
+    console.log(
+      `Name: ${name} Parent Name: ${parentSpan && (parentSpan as any).name}`
+    );
+
     // There is no nicer way to change the span in the context
     context.span = span;
 
