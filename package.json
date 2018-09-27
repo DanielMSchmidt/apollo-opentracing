@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/graphql": "14.0.1",
     "@types/jest": "23.3.2",
-    "@types/node": "10.11.1",
+    "@types/node": "10.11.2",
     "apollo-server": "2.1.0",
     "apollo-server-env": "2.0.3",
     "express": "4.16.3",
