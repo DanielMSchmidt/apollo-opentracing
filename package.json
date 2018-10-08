@@ -38,7 +38,7 @@
     "graphql-extensions": "^0.2.0"
   },
   "devDependencies": {
-    "@types/graphql": "14.0.1",
+    "@types/graphql": "14.0.2",
     "@types/jest": "23.3.3",
     "@types/node": "10.11.4",
     "apollo-server": "2.1.0",
