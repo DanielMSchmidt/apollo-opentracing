@@ -48,7 +48,7 @@
     "graphql-tools": "4.0.1",
     "jest": "23.6.0",
     "opentracing": "0.14.3",
-    "semantic-release": "15.9.17",
+    "semantic-release": "15.10.3",
     "supertest": "3.3.0",
     "travis-deploy-once": "5.0.9",
     "ts-jest": "23.1.4",
