@@ -3,6 +3,7 @@ import { GraphQLResolveInfo, DocumentNode } from "graphql";
 import { GraphQLExtension } from "graphql-extensions";
 import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
+import { SpanContext, addContextHelpers } from "./context";
 
 const alwaysTrue = () => true;
 
@@ -27,9 +28,7 @@ interface RequestStart {
   persistedQueryHit?: boolean;
   persistedQueryRegister?: boolean;
 }
-interface SpanContext {
-  span?: Span;
-}
+
 export default class OpentracingExtension<TContext extends SpanContext>
   implements GraphQLExtension<TContext> {
   private serverTracer: Tracer;
@@ -108,20 +107,20 @@ export default class OpentracingExtension<TContext extends SpanContext>
       return;
     }
 
+    // idempotent method to add helpers to the first context available (which will be propagated by apollo)
+    addContextHelpers(context);
+
     const name = info.fieldName || "field";
-    const parentSpan = context.span ? context.span : this.requestSpan;
+    const parentSpan =
+      info.path && info.path.prev
+        ? context.getSpanByPath(info.path.prev)
+        : this.requestSpan;
 
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined
     });
 
-    // Added to expose bug
-    console.log(
-      `Name: ${name} Parent Name: ${parentSpan && (parentSpan as any).name}`
-    );
-
-    // There is no nicer way to change the span in the context
-    context.span = span;
+    context.addSpan(span, info);
 
     return (error: Error | null, result: any) => {
       if (error) {

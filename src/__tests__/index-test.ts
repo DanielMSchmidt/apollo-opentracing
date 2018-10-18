@@ -1,4 +1,6 @@
 import ApolloOpentracing from "..";
+import { addContextHelpers } from "../context";
+
 describe("Apollo Tracing", () => {
   let server, local, tracingMiddleware;
   beforeEach(() => {
@@ -161,7 +163,14 @@ describe("Apollo Tracing", () => {
 
     it("starts the span as a child span of another field", () => {
       tracingMiddleware.requestSpan = { id: "23" };
-      tracingMiddleware.willResolveField({}, {}, { span: { id: "42" } }, {});
+      const ctx = {};
+      addContextHelpers(ctx);
+
+      ctx.addSpan({ id: "42" }, { path: { key: "previous" } });
+
+      tracingMiddleware.willResolveField({}, {}, ctx, {
+        path: { key: "b", prev: { key: "previous" } }
+      });
       expect(local.startSpan).toHaveBeenCalledWith("field", {
         childOf: { id: "42" }
       });
@@ -208,7 +217,9 @@ describe("Apollo Tracing", () => {
       tracingMiddleware.requestSpan = { id: "23" };
       const ctx = {};
       tracingMiddleware.willResolveField({}, {}, ctx, {});
-      expect(ctx.span).toBeDefined();
+      expect(ctx._spans).toBeDefined();
+      expect(ctx.getSpanByPath).toBeInstanceOf(Function);
+      expect(ctx.addSpan).toBeInstanceOf(Function);
     });
 
     it("logs an error", () => {
