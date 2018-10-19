@@ -19,6 +19,9 @@ interface InitOptions {
   ) => boolean;
 }
 
+interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
+  span?: Span;
+}
 interface RequestStart {
   request: Request;
   queryString?: string;
@@ -98,7 +101,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     source: any,
     args: { [argName: string]: any },
     context: TContext,
-    info: GraphQLResolveInfo
+    info: ExtendedGraphQLResolveInfo
   ) {
     if (
       !this.requestSpan ||
@@ -121,6 +124,9 @@ export default class OpentracingExtension<TContext extends SpanContext>
     });
 
     context.addSpan(span, info);
+
+    // expose to field
+    info.span = span;
 
     return (error: Error | null, result: any) => {
       if (error) {
