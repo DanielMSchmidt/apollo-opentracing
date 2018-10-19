@@ -1,4 +1,4 @@
-# apollo-opentracing [![npm version](https://badge.fury.io/js/apollo-opentracing.svg)](https://badge.fury.io/js/apollo-opentracing) [![Build Status](https://travis-ci.com/DanielMSchmidt/apollo-opentracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/apollo-opentracing) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+# apollo-opentracing [![npm version](https://badge.fury.io/js/apollo-opentracing.svg)](https://badge.fury.io/js/apollo-opentracing) [![Build Status](https://travis-ci.com/DanielMSchmidt/apollo-opentracing.svg?branch=master)](https://travis-ci.com/DanielMSchmidt/apollo-opentracing) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
 
 - 🚀 Request & Field level resolvers are traced out of the box
 - 🔍 Queries and results are logged, to make debugging easier
@@ -56,7 +56,7 @@ Sometimes you don't want to trace everything, so we provide ways to select if yo
 If you construct the extension with `shouldTraceRequest` you get the option to opt-in or out on a request basis.
 When you don't start the span for the request the field resolvers will also not be used.
 
-The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35). 
+The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
 
 When the request is not traced there will also be no traces of the field resolvers.
 
@@ -68,3 +68,15 @@ There might be certain field resolvers that are not worth the tracing, e.g. when
 
 Please feel free to add issues with new ideas, bugs and anything that might come up.
 Let's make performance measurement to everyone <3
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/1337046?v=4" width="100px;"/><br /><sub><b>Daniel Schmidt</b></sub>](http://danielmschmidt.de/)<br />[💻](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=DanielMSchmidt "Code") [🤔](#ideas-DanielMSchmidt "Ideas, Planning, & Feedback") | [<img src="https://avatars2.githubusercontent.com/u/3578740?v=4" width="100px;"/><br /><sub><b>Ciaran Liedeman</b></sub>](https://github.com/cliedeman)<br />[🐛](https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3Acliedeman "Bug reports") [💻](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman "Code") [⚠️](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman "Tests") | [<img src="https://avatars3.githubusercontent.com/u/453031?v=4" width="100px;"/><br /><sub><b>Jens Ulrich Hjuler Pedersen</b></sub>](http://juhp.net)<br />[🐛](https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3AMultiply "Bug reports") [🤔](#ideas-Multiply "Ideas, Planning, & Feedback") [👀](#review-Multiply "Reviewed Pull Requests") |
+| :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

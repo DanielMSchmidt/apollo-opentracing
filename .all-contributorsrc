@@ -1,0 +1,45 @@
+{
+  "projectName": "apollo-opentracing",
+  "projectOwner": "DanielMSchmidt",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "DanielMSchmidt",
+      "name": "Daniel Schmidt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1337046?v=4",
+      "profile": "http://danielmschmidt.de/",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "cliedeman",
+      "name": "Ciaran Liedeman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3578740?v=4",
+      "profile": "https://github.com/cliedeman",
+      "contributions": [
+        "bug",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "Multiply",
+      "name": "Jens Ulrich Hjuler Pedersen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/453031?v=4",
+      "profile": "http://juhp.net",
+      "contributions": [
+        "bug",
+        "ideas",
+        "review"
+      ]
+    }
+  ]
+}
