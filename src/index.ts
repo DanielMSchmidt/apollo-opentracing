@@ -3,6 +3,7 @@ import { GraphQLResolveInfo, DocumentNode } from "graphql";
 import { GraphQLExtension } from "graphql-extensions";
 import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
+import { SpanContext, addContextHelpers } from "./context";
 
 const alwaysTrue = () => true;
 
@@ -18,6 +19,9 @@ interface InitOptions {
   ) => boolean;
 }
 
+interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
+  span?: Span;
+}
 interface RequestStart {
   request: Request;
   queryString?: string;
@@ -27,9 +31,7 @@ interface RequestStart {
   persistedQueryHit?: boolean;
   persistedQueryRegister?: boolean;
 }
-interface SpanContext {
-  span?: Span;
-}
+
 export default class OpentracingExtension<TContext extends SpanContext>
   implements GraphQLExtension<TContext> {
   private serverTracer: Tracer;
@@ -99,24 +101,36 @@ export default class OpentracingExtension<TContext extends SpanContext>
     source: any,
     args: { [argName: string]: any },
     context: TContext,
-    info: GraphQLResolveInfo
+    info: ExtendedGraphQLResolveInfo
   ) {
     if (
+      // we don't trace the request
       !this.requestSpan ||
-      !this.shouldTraceFieldResolver(source, args, context, info)
+      // we should not trace this resolver
+      !this.shouldTraceFieldResolver(source, args, context, info) ||
+      // the previous resolver was not traced
+      (info.path && info.path.prev && !context.getSpanByPath(info.path.prev))
     ) {
       return;
     }
 
+    // idempotent method to add helpers to the first context available (which will be propagated by apollo)
+    addContextHelpers(context);
+
     const name = info.fieldName || "field";
-    const parentSpan = context.span ? context.span : this.requestSpan;
+    const parentSpan =
+      info.path && info.path.prev
+        ? context.getSpanByPath(info.path.prev)
+        : this.requestSpan;
 
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined
     });
 
-    // There is no nicer way to change the span in the context
-    context.span = span;
+    context.addSpan(span, info);
+
+    // expose to field
+    info.span = span;
 
     return (error: Error | null, result: any) => {
       if (error) {

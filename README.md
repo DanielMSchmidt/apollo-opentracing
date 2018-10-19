@@ -45,9 +45,42 @@ app.use(
 ![example image](demo.png)
 
 To connect other services you need to use the opentracing [inject](http://opentracing.io/documentation/pages/api/cross-process-tracing.html) function of your tracer.
-We pass the current span down to your resolvers as `context.span`, so you should use it.
+We pass the current span down to your resolvers as `info.span`, so you should use it.
 
 You can also make use of it and add new logs or tags on the fly if you like.
+This may look something like this:
+
+```js
+myFieldResolver(source, args, context, info) {
+  const headers = {...};
+
+  const parentSpan = info.span;
+  // please use the same tracer you passed down to the extension
+  const networkSpan = tracer.startSpan("NetworkRequest:" + endpoint, {
+    childOf: parentSpan
+  });
+
+  // Let's transfer the span information to the headers
+  tracer.inject(
+    networkSpan,
+    YourOpentracingImplementation.FORMAT_HTTP_HEADERS,
+    headers
+  );
+
+  return doNetworkRequest(endpoint, headers).then(result => {
+    networkSpan.finish()
+    return result;
+  }, err => {
+    networkSpan.log({
+      error: true,
+      errorMessage: err
+    });
+
+    networkSpan.finish();
+    return err;
+  });
+}
+```
 
 ## Selective Tracing
 
@@ -64,7 +97,7 @@ When the request is not traced there will also be no traces of the field resolve
 
 ### By Field
 
-There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. To control if you want a field resolver to be traced you can pass the `shouldTraceFieldResolver` option to the constructor. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`. When you return false no traces will be made of this field resolvers.
+There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. To control if you want a field resolver to be traced you can pass the `shouldTraceFieldResolver` option to the constructor. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`. When you return false no traces will be made of this field resolvers and all underlying ones.
 
 ## Contributing
 
