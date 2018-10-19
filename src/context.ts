@@ -27,6 +27,7 @@ function isSpanContext(obj: any): obj is SpanContext {
   );
 }
 
+// TODO: think about using symbols to hide these
 export function addContextHelpers(obj: any): SpanContext {
   if (isSpanContext(obj)) {
     return obj;

@@ -213,13 +213,20 @@ describe("Apollo Tracing", () => {
       );
     });
 
-    it("adds the span to the context", () => {
+    it("adds the spancontext to the context", () => {
       tracingMiddleware.requestSpan = { id: "23" };
       const ctx = {};
       tracingMiddleware.willResolveField({}, {}, ctx, {});
       expect(ctx._spans).toBeDefined();
       expect(ctx.getSpanByPath).toBeInstanceOf(Function);
       expect(ctx.addSpan).toBeInstanceOf(Function);
+    });
+
+    it("exposes the span in the info", () => {
+      tracingMiddleware.requestSpan = { id: "23" };
+      const info = {};
+      tracingMiddleware.willResolveField({}, {}, {}, info);
+      expect(info.span).toBeDefined();
     });
 
     it("logs an error", () => {
