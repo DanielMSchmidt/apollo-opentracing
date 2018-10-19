@@ -152,3 +152,164 @@ Object {
   "parentId": undefined,
 }
 `;
+
+exports[`integration with apollo-server implements traces for arrays 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "finished": true,
+          "id": 13,
+          "logs": Array [
+            Object {
+              "result": "\\"1\\"",
+            },
+            Object {
+              "result": "\\"I\\"",
+            },
+            Object {
+              "result": "\\"eins\\"",
+            },
+          ],
+          "name": "one",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+        Object {
+          "children": Array [],
+          "finished": true,
+          "id": 14,
+          "logs": Array [
+            Object {
+              "result": "\\"2\\"",
+            },
+            Object {
+              "result": "\\"II\\"",
+            },
+            Object {
+              "result": "\\"zwei\\"",
+            },
+          ],
+          "name": "two",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+        Object {
+          "children": Array [],
+          "finished": false,
+          "id": 15,
+          "logs": Array [],
+          "name": "one",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+        Object {
+          "children": Array [],
+          "finished": false,
+          "id": 16,
+          "logs": Array [],
+          "name": "two",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+        Object {
+          "children": Array [],
+          "finished": false,
+          "id": 17,
+          "logs": Array [],
+          "name": "one",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+        Object {
+          "children": Array [],
+          "finished": false,
+          "id": 18,
+          "logs": Array [],
+          "name": "two",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 12,
+              "log": [Function],
+              "name": "as",
+            },
+          },
+          "parentId": 12,
+        },
+      ],
+      "finished": true,
+      "id": 12,
+      "logs": Array [
+        Object {
+          "result": "[{\\"one\\":\\"1\\",\\"two\\":\\"2\\"},{\\"one\\":\\"I\\",\\"two\\":\\"II\\"},{\\"one\\":\\"eins\\",\\"two\\":\\"zwei\\"}]",
+        },
+      ],
+      "name": "as",
+      "options": Object {
+        "childOf": Object {
+          "finish": [Function],
+          "id": 11,
+          "log": [Function],
+          "name": "request",
+        },
+      },
+      "parentId": 11,
+    },
+  ],
+  "finished": true,
+  "id": 11,
+  "logs": Array [
+    Object {
+      "queryString": "query {
+        as {
+          one
+          two
+        }
+      }",
+    },
+  ],
+  "name": "request",
+  "options": Object {
+    "childOf": undefined,
+  },
+  "parentId": undefined,
+}
+`;

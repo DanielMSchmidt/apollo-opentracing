@@ -151,6 +151,23 @@ function createApp({ tracer, ...params }) {
           return {
             four: "4"
           };
+        },
+
+        as() {
+          return [
+            {
+              one: "1",
+              two: "2"
+            },
+            {
+              one: "I",
+              two: "II"
+            },
+            {
+              one: "eins",
+              two: "zwei"
+            }
+          ];
         }
       }
     },
@@ -225,6 +242,26 @@ describe("integration with apollo-server", () => {
         }
         b {
           four
+        }
+      }`
+      })
+      .expect(200);
+
+    const tree = buildSpanTree(tracer.spans);
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("implements traces for arrays", async () => {
+    const tracer = new MockTracer();
+    const app = createApp({ tracer });
+    await request(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .send({
+        query: `query {
+        as {
+          one
+          two
         }
       }`
       })

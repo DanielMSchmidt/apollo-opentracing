@@ -1,11 +1,15 @@
 import { Span } from "opentracing";
 import { GraphQLResolveInfo, ResponsePath } from "graphql";
 
-export function buildPath(path: ResponsePath) {
-  let current: ResponsePath | undefined = path;
+function isArrayPath(path: ResponsePath) {
+  return typeof path.key === "number";
+}
+
+export function buildPath(path: ResponsePath | undefined) {
+  let current = path;
   const segments = [];
   while (current != null) {
-    if (typeof current.key === "number") {
+    if (isArrayPath(current)) {
       segments.push(`[${current.key}]`);
     } else {
       segments.push(current.key);
@@ -35,7 +39,7 @@ export function addContextHelpers(obj: any): SpanContext {
 
   obj._spans = new Map<string, Span>();
   obj.getSpanByPath = function(path: ResponsePath): Span | undefined {
-    return this._spans.get(buildPath(path));
+    return this._spans.get(buildPath(isArrayPath(path) ? path.prev : path));
   };
 
   obj.addSpan = function(span: Span, info: GraphQLResolveInfo): void {
