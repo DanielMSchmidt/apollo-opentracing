@@ -104,8 +104,12 @@ export default class OpentracingExtension<TContext extends SpanContext>
     info: ExtendedGraphQLResolveInfo
   ) {
     if (
+      // we don't trace the request
       !this.requestSpan ||
-      !this.shouldTraceFieldResolver(source, args, context, info)
+      // we should not trace this resolver
+      !this.shouldTraceFieldResolver(source, args, context, info) ||
+      // the previous resolver was not traced
+      (info.path && info.path.prev && !context.getSpanByPath(info.path.prev))
     ) {
       return;
     }

@@ -116,7 +116,7 @@ class MockTracer {
   }
 }
 
-function createApp({ tracer }) {
+function createApp({ tracer, ...params }) {
   const app = express();
 
   const server = new ApolloServer({
@@ -146,10 +146,17 @@ function createApp({ tracer }) {
             two: "2",
             three: [{ four: "4" }, { four: "IV" }]
           };
+        },
+        b() {
+          return {
+            four: "4"
+          };
         }
       }
     },
-    extensions: [() => new ApolloOpentracing({ server: tracer, local: tracer })]
+    extensions: [
+      () => new ApolloOpentracing({ ...params, server: tracer, local: tracer })
+    ]
   });
 
   server.applyMiddleware({ app });
@@ -188,6 +195,36 @@ describe("integration with apollo-server", () => {
         a {
           one
           two
+        }
+      }`
+      })
+      .expect(200);
+
+    const tree = buildSpanTree(tracer.spans);
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("does not start a field resolver span if the parent field resolver was not traced", async () => {
+    const tracer = new MockTracer();
+    const shouldTraceFieldResolver = (source, args, ctx, info) => {
+      if (info.fieldName === "a") {
+        return false;
+      }
+      return true;
+    };
+
+    const app = createApp({ tracer, shouldTraceFieldResolver });
+    await request(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .send({
+        query: `query {
+        a {
+          one
+          two
+        }
+        b {
+          four
         }
       }`
       })
