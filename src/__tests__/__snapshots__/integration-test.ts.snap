@@ -84,3 +84,71 @@ Object {
   "parentId": undefined,
 }
 `;
+
+exports[`integration with apollo-server does not start a field resolver span if the parent field resolver was not traced 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [],
+          "finished": true,
+          "id": 10,
+          "logs": Array [
+            Object {
+              "result": "\\"4\\"",
+            },
+          ],
+          "name": "four",
+          "options": Object {
+            "childOf": Object {
+              "finish": [Function],
+              "id": 9,
+              "log": [Function],
+              "name": "b",
+            },
+          },
+          "parentId": 9,
+        },
+      ],
+      "finished": true,
+      "id": 9,
+      "logs": Array [
+        Object {
+          "result": "{\\"four\\":\\"4\\"}",
+        },
+      ],
+      "name": "b",
+      "options": Object {
+        "childOf": Object {
+          "finish": [Function],
+          "id": 8,
+          "log": [Function],
+          "name": "request",
+        },
+      },
+      "parentId": 8,
+    },
+  ],
+  "finished": true,
+  "id": 8,
+  "logs": Array [
+    Object {
+      "queryString": "query {
+        a {
+          one
+          two
+        }
+        b {
+          four
+        }
+      }",
+    },
+  ],
+  "name": "request",
+  "options": Object {
+    "childOf": undefined,
+  },
+  "parentId": undefined,
+}
+`;
