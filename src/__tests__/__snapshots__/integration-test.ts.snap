@@ -1,315 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`integration with apollo-server correct span nesting 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [],
-          "finished": true,
-          "id": 6,
-          "logs": Array [
-            Object {
-              "result": "\\"1\\"",
-            },
-          ],
-          "name": "one",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 5,
-              "log": [Function],
-              "name": "a",
-            },
-          },
-          "parentId": 5,
-        },
-        Object {
-          "children": Array [],
-          "finished": true,
-          "id": 7,
-          "logs": Array [
-            Object {
-              "result": "\\"2\\"",
-            },
-          ],
-          "name": "two",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 5,
-              "log": [Function],
-              "name": "a",
-            },
-          },
-          "parentId": 5,
-        },
-      ],
-      "finished": true,
-      "id": 5,
-      "logs": Array [
-        Object {
-          "result": "{\\"one\\":\\"1\\",\\"two\\":\\"2\\",\\"three\\":[{\\"four\\":\\"4\\"},{\\"four\\":\\"IV\\"}]}",
-        },
-      ],
-      "name": "a",
-      "options": Object {
-        "childOf": Object {
-          "finish": [Function],
-          "id": 4,
-          "log": [Function],
-          "name": "request",
-        },
-      },
-      "parentId": 4,
-    },
-  ],
-  "finished": true,
-  "id": 4,
-  "logs": Array [
-    Object {
-      "queryString": "query {
-        a {
-          one
-          two
-        }
-      }",
-    },
-  ],
-  "name": "request",
-  "options": Object {
-    "childOf": undefined,
-  },
-  "parentId": undefined,
-}
+request:1
+   finished: true
+   logs:
+   1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n      }"}
++-- a:2
+      finished: true
+      logs:
+      1. {"result":"{one:1,two:2,three:[{four:4},{four:IV}]}"}
+   +-- one:3
+         finished: true
+         logs:
+         1. {"result":"1"}
+   +-- two:4
+         finished: true
+         logs:
+         1. {"result":"2"}
+
 `;
 
 exports[`integration with apollo-server does not start a field resolver span if the parent field resolver was not traced 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [],
-          "finished": true,
-          "id": 10,
-          "logs": Array [
-            Object {
-              "result": "\\"4\\"",
-            },
-          ],
-          "name": "four",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 9,
-              "log": [Function],
-              "name": "b",
-            },
-          },
-          "parentId": 9,
-        },
-      ],
-      "finished": true,
-      "id": 9,
-      "logs": Array [
-        Object {
-          "result": "{\\"four\\":\\"4\\"}",
-        },
-      ],
-      "name": "b",
-      "options": Object {
-        "childOf": Object {
-          "finish": [Function],
-          "id": 8,
-          "log": [Function],
-          "name": "request",
-        },
-      },
-      "parentId": 8,
-    },
-  ],
-  "finished": true,
-  "id": 8,
-  "logs": Array [
-    Object {
-      "queryString": "query {
-        a {
-          one
-          two
-        }
-        b {
-          four
-        }
-      }",
-    },
-  ],
-  "name": "request",
-  "options": Object {
-    "childOf": undefined,
-  },
-  "parentId": undefined,
-}
+request:1
+   finished: true
+   logs:
+   1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n        b {\\n          four\\n        }\\n      }"}
++-- b:2
+      finished: true
+      logs:
+      1. {"result":"{four:4}"}
+   +-- four:3
+         finished: true
+         logs:
+         1. {"result":"4"}
+
 `;
 
 exports[`integration with apollo-server implements traces for arrays 1`] = `
-Object {
-  "children": Array [
-    Object {
-      "children": Array [
-        Object {
-          "children": Array [],
-          "finished": true,
-          "id": 13,
-          "logs": Array [
-            Object {
-              "result": "\\"1\\"",
-            },
-            Object {
-              "result": "\\"I\\"",
-            },
-            Object {
-              "result": "\\"eins\\"",
-            },
-          ],
-          "name": "one",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-        Object {
-          "children": Array [],
-          "finished": true,
-          "id": 14,
-          "logs": Array [
-            Object {
-              "result": "\\"2\\"",
-            },
-            Object {
-              "result": "\\"II\\"",
-            },
-            Object {
-              "result": "\\"zwei\\"",
-            },
-          ],
-          "name": "two",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-        Object {
-          "children": Array [],
-          "finished": false,
-          "id": 15,
-          "logs": Array [],
-          "name": "one",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-        Object {
-          "children": Array [],
-          "finished": false,
-          "id": 16,
-          "logs": Array [],
-          "name": "two",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-        Object {
-          "children": Array [],
-          "finished": false,
-          "id": 17,
-          "logs": Array [],
-          "name": "one",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-        Object {
-          "children": Array [],
-          "finished": false,
-          "id": 18,
-          "logs": Array [],
-          "name": "two",
-          "options": Object {
-            "childOf": Object {
-              "finish": [Function],
-              "id": 12,
-              "log": [Function],
-              "name": "as",
-            },
-          },
-          "parentId": 12,
-        },
-      ],
-      "finished": true,
-      "id": 12,
-      "logs": Array [
-        Object {
-          "result": "[{\\"one\\":\\"1\\",\\"two\\":\\"2\\"},{\\"one\\":\\"I\\",\\"two\\":\\"II\\"},{\\"one\\":\\"eins\\",\\"two\\":\\"zwei\\"}]",
-        },
-      ],
-      "name": "as",
-      "options": Object {
-        "childOf": Object {
-          "finish": [Function],
-          "id": 11,
-          "log": [Function],
-          "name": "request",
-        },
-      },
-      "parentId": 11,
-    },
-  ],
-  "finished": true,
-  "id": 11,
-  "logs": Array [
-    Object {
-      "queryString": "query {
-        as {
-          one
-          two
-        }
-      }",
-    },
-  ],
-  "name": "request",
-  "options": Object {
-    "childOf": undefined,
-  },
-  "parentId": undefined,
-}
+request:1
+   finished: true
+   logs:
+   1. {"queryString":"query {\\n        as {\\n          one\\n          two\\n        }\\n      }"}
++-- as:2
+      finished: true
+      logs:
+      1. {"result":"[{one:1,two:2},{one:I,two:II},{one:eins,two:zwei}]"}
+   +-- one:3
+         finished: true
+         logs:
+         1. {"result":"1"}
+   +-- two:4
+         finished: true
+         logs:
+         1. {"result":"2"}
+   +-- one:5
+         finished: true
+         logs:
+         1. {"result":"I"}
+   +-- two:6
+         finished: true
+         logs:
+         1. {"result":"II"}
+   +-- one:7
+         finished: true
+         logs:
+         1. {"result":"eins"}
+   +-- two:8
+         finished: true
+         logs:
+         1. {"result":"zwei"}
+
 `;

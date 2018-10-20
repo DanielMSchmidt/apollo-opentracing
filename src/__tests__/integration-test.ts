@@ -2,21 +2,17 @@ import * as express from "express";
 import * as request from "supertest";
 import { ApolloServer } from "apollo-server-express";
 import ApolloOpentracing from "../";
+import spanSerializer from "../test/span-serializer";
+import { MockSpan, MockSpanTree } from "../test/types";
+
+expect.addSnapshotSerializer(spanSerializer);
 
 let mockSpanId = 1;
 
-interface MockSpan {
-  id: number;
-  parentId?: number;
-  name: string;
-  options?: any;
-  logs: any[];
-  finished: boolean;
-}
-
-interface MockSpanTree extends MockSpan {
-  children: MockSpanTree[];
-}
+// Stable spanId's
+beforeEach(() => {
+  mockSpanId = 1;
+});
 
 const buildSpanTree = (spans: MockSpan[]) => {
   // TODO we currently assume there is only one null parent entry.
@@ -102,7 +98,7 @@ class MockTracer {
 
     return {
       log(object) {
-        self.spans.find(span => span.name === name).logs.push(object);
+        self.spans.find(span => span.id === spanId).logs.push(object);
       },
 
       id: spanId,
@@ -110,7 +106,7 @@ class MockTracer {
       name: name,
 
       finish() {
-        self.spans.find(span => span.name === name).finished = true;
+        self.spans.find(span => span.id === spanId).finished = true;
       }
     };
   }
