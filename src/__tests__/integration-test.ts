@@ -266,4 +266,48 @@ describe("integration with apollo-server", () => {
     const tree = buildSpanTree(tracer.spans);
     expect(tree).toMatchSnapshot();
   });
+
+  it("alias works", async () => {
+    const tracer = new MockTracer();
+    const app = createApp({ tracer });
+    await request(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .send({
+        query: `query {
+        a {
+          uno: one
+          two
+        }
+      }`
+      })
+      .expect(200);
+
+    const tree = buildSpanTree(tracer.spans);
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("alias with fragment works", async () => {
+    const tracer = new MockTracer();
+    const app = createApp({ tracer });
+    await request(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .send({
+        query: `
+        fragment F on A {
+          dos: two
+        }
+
+        query {
+        a {
+          ...F
+        }
+      }`
+      })
+      .expect(200);
+
+    const tree = buildSpanTree(tracer.spans);
+    expect(tree).toMatchSnapshot();
+  });
 });

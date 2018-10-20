@@ -32,6 +32,18 @@ interface RequestStart {
   persistedQueryRegister?: boolean;
 }
 
+function getFieldName(info: GraphQLResolveInfo) {
+  if (
+    info.fieldNodes &&
+    info.fieldNodes.length > 0 &&
+    info.fieldNodes[0].alias
+  ) {
+    return info.fieldNodes[0].alias.value;
+  }
+
+  return info.fieldName || "field";
+}
+
 export default class OpentracingExtension<TContext extends SpanContext>
   implements GraphQLExtension<TContext> {
   private serverTracer: Tracer;
@@ -117,7 +129,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     // idempotent method to add helpers to the first context available (which will be propagated by apollo)
     addContextHelpers(context);
 
-    const name = info.fieldName || "field";
+    const name = getFieldName(info);
     const parentSpan =
       info.path && info.path.prev
         ? context.getSpanByPath(info.path.prev)
