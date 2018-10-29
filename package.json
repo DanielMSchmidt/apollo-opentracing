@@ -48,7 +48,7 @@
     "apollo-server-env": "2.0.3",
     "express": "4.16.4",
     "graphql": "14.0.2",
-    "graphql-tools": "4.0.2",
+    "graphql-tools": "4.0.3",
     "jest": "23.6.0",
     "opentracing": "0.14.3",
     "semantic-release": "15.10.6",
