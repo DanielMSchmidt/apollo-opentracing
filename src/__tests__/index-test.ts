@@ -229,26 +229,39 @@ describe("Apollo Tracing", () => {
       expect(info.span).toBeDefined();
     });
 
-    it("logs an error", () => {
-      tracingMiddleware.requestSpan = { id: "23" };
-      const err = new Error("my-error");
-
-      const cb = tracingMiddleware.willResolveField({}, {}, {}, {});
-      cb(err);
-
-      expect(local.span.log).toHaveBeenCalledWith({
-        error: JSON.stringify(err)
+    it("calls onFieldResolve in willResolveField", () => {
+      const onFieldResolve = jest.fn();
+      tracingMiddleware = new ApolloOpentracing({
+        server,
+        local,
+        onFieldResolve
       });
+      tracingMiddleware.requestSpan = { id: "23" };
+      const info = {};
+      const context = { headers: "abc" };
+      tracingMiddleware.willResolveField({}, {}, context, info);
+      expect(onFieldResolve).toHaveBeenCalledWith({}, {}, context, info);
     });
 
-    it("logs a result", () => {
+    it("doesn't logs a result and calls on field resolve finish", () => {
+      const onFieldResolveFinish = jest.fn();
+      tracingMiddleware = new ApolloOpentracing({
+        server,
+        local,
+        onFieldResolveFinish
+      });
       tracingMiddleware.requestSpan = { id: "23" };
       const result = { data: { id: "42" } };
 
       const cb = tracingMiddleware.willResolveField({}, {}, {}, {});
       cb(null, result);
 
-      expect(local.span.log).toHaveBeenCalledWith({
+      expect(onFieldResolveFinish).toHaveBeenCalledWith(
+        null,
+        result,
+        local.span
+      );
+      expect(local.span.log).not.toHaveBeenCalledWith({
         result: JSON.stringify(result)
       });
     });
