@@ -10,6 +10,13 @@ const alwaysTrue = () => true;
 interface InitOptions {
   server?: Tracer;
   local?: Tracer;
+  onFieldResolveFinish?: (error: Error | null, result: any, span: Span) => void;
+  onFieldResolve?: (
+    source: any,
+    args: { [argName: string]: any },
+    context: SpanContext,
+    info: GraphQLResolveInfo
+  ) => void;
   shouldTraceRequest?: (info: RequestStart) => boolean;
   shouldTraceFieldResolver?: (
     source: any,
@@ -49,6 +56,17 @@ export default class OpentracingExtension<TContext extends SpanContext>
   private serverTracer: Tracer;
   private localTracer: Tracer;
   private requestSpan: Span | null;
+  private onFieldResolveFinish?: (
+    error: Error | null,
+    result: any,
+    span: Span
+  ) => void;
+  private onFieldResolve?: (
+    source: any,
+    args: { [argName: string]: any },
+    context: SpanContext,
+    info: GraphQLResolveInfo
+  ) => void;
   private shouldTraceRequest: (info: RequestStart) => boolean;
   private shouldTraceFieldResolver: (
     source: any,
@@ -61,7 +79,9 @@ export default class OpentracingExtension<TContext extends SpanContext>
     server,
     local,
     shouldTraceRequest,
-    shouldTraceFieldResolver
+    shouldTraceFieldResolver,
+    onFieldResolveFinish,
+    onFieldResolve
   }: InitOptions = {}) {
     if (!server) {
       throw new Error(
@@ -80,6 +100,8 @@ export default class OpentracingExtension<TContext extends SpanContext>
     this.requestSpan = null;
     this.shouldTraceRequest = shouldTraceRequest || alwaysTrue;
     this.shouldTraceFieldResolver = shouldTraceFieldResolver || alwaysTrue;
+    this.onFieldResolveFinish = onFieldResolveFinish;
+    this.onFieldResolve = onFieldResolve;
   }
 
   requestDidStart(infos: RequestStart) {
@@ -140,16 +162,16 @@ export default class OpentracingExtension<TContext extends SpanContext>
     });
 
     context.addSpan(span, info);
-
     // expose to field
     info.span = span;
 
+    if (this.onFieldResolve) {
+      this.onFieldResolve(source, args, context, info);
+    }
+
     return (error: Error | null, result: any) => {
-      if (error) {
-        span.log({ error: JSON.stringify(error) });
-      }
-      if (result) {
-        span.log({ result: JSON.stringify(result) });
+      if (this.onFieldResolveFinish) {
+        this.onFieldResolveFinish(error, result, span);
       }
       span.finish();
     };

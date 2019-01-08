@@ -7,12 +7,8 @@ request:1
    1. {"queryString":"\\n        fragment F on A {\\n          dos: two\\n        }\\n\\n        query {\\n        a {\\n          ...F\\n        }\\n      }"}
 +-- a:2
       finished: true
-      logs:
-      1. {"result":"{one:1,two:2,three:[{four:4},{four:IV}]}"}
    +-- dos:3
          finished: true
-         logs:
-         1. {"result":"2"}
 
 `;
 
@@ -23,16 +19,10 @@ request:1
    1. {"queryString":"query {\\n        a {\\n          uno: one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
-      logs:
-      1. {"result":"{one:1,two:2,three:[{four:4},{four:IV}]}"}
    +-- uno:3
          finished: true
-         logs:
-         1. {"result":"1"}
    +-- two:4
          finished: true
-         logs:
-         1. {"result":"2"}
 
 `;
 
@@ -43,16 +33,10 @@ request:1
    1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
-      logs:
-      1. {"result":"{one:1,two:2,three:[{four:4},{four:IV}]}"}
    +-- one:3
          finished: true
-         logs:
-         1. {"result":"1"}
    +-- two:4
          finished: true
-         logs:
-         1. {"result":"2"}
 
 `;
 
@@ -63,12 +47,8 @@ request:1
    1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n        b {\\n          four\\n        }\\n      }"}
 +-- b:2
       finished: true
-      logs:
-      1. {"result":"{four:4}"}
    +-- four:3
          finished: true
-         logs:
-         1. {"result":"4"}
 
 `;
 
@@ -79,31 +59,17 @@ request:1
    1. {"queryString":"query {\\n        as {\\n          one\\n          two\\n        }\\n      }"}
 +-- as:2
       finished: true
-      logs:
-      1. {"result":"[{one:1,two:2},{one:I,two:II},{one:eins,two:zwei}]"}
    +-- one:3
          finished: true
-         logs:
-         1. {"result":"1"}
    +-- two:4
          finished: true
-         logs:
-         1. {"result":"2"}
    +-- one:5
          finished: true
-         logs:
-         1. {"result":"I"}
    +-- two:6
          finished: true
-         logs:
-         1. {"result":"II"}
    +-- one:7
          finished: true
-         logs:
-         1. {"result":"eins"}
    +-- two:8
          finished: true
-         logs:
-         1. {"result":"zwei"}
 
 `;
