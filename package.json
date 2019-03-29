@@ -40,7 +40,7 @@
     "graphql-extensions": "^0.2.0"
   },
   "devDependencies": {
-    "@types/graphql": "14.0.7",
+    "@types/graphql": "14.2.0",
     "@types/jest": "23.3.14",
     "@types/node": "10.14.4",
     "all-contributors-cli": "5.11.0",
