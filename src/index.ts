@@ -119,16 +119,19 @@ export default class OpentracingExtension<TContext extends SpanContext>
       return;
     }
 
-    let headers = infos.request && infos.request.headers
-    if (headers && typeof headers.get === 'function') {
-      headers = this.mapToObj(infos.request.headers as Map<string, any>)
+    let headers
+    let tmpHeaders = infos.request && infos.request.headers as unknown as Map<string, any>
+    if (tmpHeaders && typeof tmpHeaders.get === 'function') {
+      headers = this.mapToObj(tmpHeaders)
+    } else {
+      headers = tmpHeaders
     }
 
     const externalSpan =
       infos.request && infos.request.headers
         ? this.serverTracer.extract(
             opentracing.FORMAT_HTTP_HEADERS,
-            infos.request.headers
+            headers
           )
         : undefined;
 
