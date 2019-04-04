@@ -121,7 +121,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
 
     let headers = infos.request && infos.request.headers
     if (headers && typeof headers.get === 'function') {
-      headers = this.mapToObj(infos.request.headers)
+      headers = this.mapToObj(infos.request.headers as Map<string, any>)
     }
 
     const externalSpan =
