@@ -104,9 +104,24 @@ export default class OpentracingExtension<TContext extends SpanContext>
     this.onFieldResolve = onFieldResolve;
   }
 
+  mapToObj(inputMap: Map<string, any>) {
+    let obj: { [key: string]: string } = {};
+
+    inputMap.forEach(function(value, key){
+      obj[key] = value
+    });
+
+    return obj;
+  }
+
   requestDidStart(infos: RequestStart) {
     if (!this.shouldTraceRequest(infos)) {
       return;
+    }
+
+    let headers = infos.request && infos.request.headers
+    if (headers && typeof headers.get === 'function') {
+      headers = this.mapToObj(infos.request.headers)
     }
 
     const externalSpan =
