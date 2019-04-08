@@ -37,13 +37,13 @@
     "opentracing": "*"
   },
   "dependencies": {
-    "graphql-extensions": "^0.2.0"
+    "graphql-extensions": "^0.5.7"
   },
   "devDependencies": {
     "@types/graphql": "14.2.0",
     "@types/jest": "23.3.14",
-    "@types/node": "10.14.4",
-    "all-contributors-cli": "5.11.0",
+    "@types/node": "11.13.0",
+    "all-contributors-cli": "6.2.0",
     "apollo-server": "2.4.8",
     "apollo-server-env": "2.2.0",
     "express": "4.16.4",
@@ -52,7 +52,7 @@
     "jest": "23.6.0",
     "opentracing": "0.14.3",
     "semantic-release": "15.13.3",
-    "supertest": "3.4.2",
+    "supertest": "4.0.2",
     "travis-deploy-once": "5.0.11",
     "ts-jest": "23.1.4",
     "typescript": "3.4.2"

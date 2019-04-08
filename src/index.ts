@@ -30,7 +30,7 @@ interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
   span?: Span;
 }
 interface RequestStart {
-  request: Request;
+  request: Pick<Request, "url" | "method" | "headers">;
   queryString?: string;
   parsedQuery?: DocumentNode;
   operationName?: string;
