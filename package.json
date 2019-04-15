@@ -1,6 +1,6 @@
 {
-  "name": "@blabu.com/apollo-opentracing",
-  "version": "1.2.0",
+  "name": "apollo-opentracing",
+  "version": "0.0.0-development",
   "description": "Trace your GraphQL server with Opentracing",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,7 +28,7 @@
       "node"
     ]
   },
-  "repository": "voslartomas/apollo-opentracing",
+  "repository": "DanielMSchmidt/apollo-opentracing",
   "author": "Daniel Schmidt <danielmschmidt92@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
