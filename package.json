@@ -33,7 +33,7 @@
   "license": "MIT",
   "peerDependencies": {
     "apollo-server-env": "*",
-    "graphql": "0.10.x - 14.2.x",
+    "graphql": "0.10.x - 14.x.x",
     "opentracing": "*"
   },
   "dependencies": {
