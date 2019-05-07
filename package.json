@@ -43,7 +43,7 @@
     "@types/graphql": "14.2.0",
     "@types/jest": "23.3.14",
     "@types/node": "11.13.10",
-    "all-contributors-cli": "6.3.1",
+    "all-contributors-cli": "6.4.0",
     "apollo-server": "2.4.8",
     "apollo-server-env": "2.2.0",
     "express": "4.16.4",
