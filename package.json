@@ -37,7 +37,7 @@
     "opentracing": "*"
   },
   "dependencies": {
-    "graphql-extensions": "^0.5.7"
+    "graphql-extensions": "^0.6.0"
   },
   "devDependencies": {
     "@types/graphql": "14.2.0",
