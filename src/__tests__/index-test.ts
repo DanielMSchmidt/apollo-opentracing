@@ -69,7 +69,6 @@ describe("Apollo Tracing", () => {
       const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
-      expect(server.span.setTag).toHaveBeenCalledWith("queryString", "query {}");
 
       cb();
       expect(server.span.finish).toHaveBeenCalled();
@@ -79,7 +78,6 @@ describe("Apollo Tracing", () => {
       const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
-      expect(server.span.setTag).toHaveBeenCalledWith("queryString", "query {}");
 
       cb(new Error("ups"));
       expect(server.span.finish).toHaveBeenCalled();
