@@ -24,10 +24,19 @@ function logs(span: MockSpanTree, depth: number) {
   return "";
 }
 
+function tags(span: MockSpanTree, depth: number) {
+  if (span.tags && span.tags.length > 0) {
+    return `${TAB.repeat(depth + 1)}tags:\n${span.tags
+      .map((tag, index) => logLine(tag, index + 1, depth))
+      .join("\n")}\n`;
+  }
+  return "";
+}
+
 function tag(span: MockSpanTree, depth: number) {
   return `${span.name}:${span.id}\n${TAB.repeat(depth + 1)}finished: ${
     span.finished
-  }\n${logs(span, depth)}`;
+  }\n${logs(span, depth)}\n${tags(span, depth)}`;
 }
 
 function buildSpan(span: MockSpanTree, depth = 0) {

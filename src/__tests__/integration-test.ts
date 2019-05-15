@@ -91,6 +91,7 @@ class MockTracer {
       name,
       options,
       logs: [],
+      tags: [],
       finished: false
     });
 
@@ -99,6 +100,10 @@ class MockTracer {
     return {
       log(object) {
         self.spans.find(span => span.id === spanId).logs.push(object);
+      },
+
+      setTag(key, value) {
+        self.spans.find(span => span.id === spanId).tags.push({"key": key, "value": value})
       },
 
       id: spanId,

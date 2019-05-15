@@ -139,9 +139,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
       childOf: externalSpan ? externalSpan : undefined
     });
 
-    rootSpan.log({
-      queryString: infos.queryString
-    });
+    rootSpan.setTag("queryString", infos.queryString);
     this.requestSpan = rootSpan;
 
     return () => {
