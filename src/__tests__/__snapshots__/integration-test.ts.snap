@@ -3,73 +3,95 @@
 exports[`integration with apollo-server alias with fragment works 1`] = `
 request:1
    finished: true
-   logs:
-   1. {"queryString":"\\n        fragment F on A {\\n          dos: two\\n        }\\n\\n        query {\\n        a {\\n          ...F\\n        }\\n      }"}
+
+   tags:
+   1. {"key":"queryString","value":"\\n        fragment F on A {\\n          dos: two\\n        }\\n\\n        query {\\n        a {\\n          ...F\\n        }\\n      }"}
 +-- a:2
       finished: true
+
    +-- dos:3
          finished: true
+
 
 `;
 
 exports[`integration with apollo-server alias works 1`] = `
 request:1
    finished: true
-   logs:
-   1. {"queryString":"query {\\n        a {\\n          uno: one\\n          two\\n        }\\n      }"}
+
+   tags:
+   1. {"key":"queryString","value":"query {\\n        a {\\n          uno: one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
+
    +-- uno:3
          finished: true
+
    +-- two:4
          finished: true
+
 
 `;
 
 exports[`integration with apollo-server correct span nesting 1`] = `
 request:1
    finished: true
-   logs:
-   1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n      }"}
+
+   tags:
+   1. {"key":"queryString","value":"query {\\n        a {\\n          one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
+
    +-- one:3
          finished: true
+
    +-- two:4
          finished: true
+
 
 `;
 
 exports[`integration with apollo-server does not start a field resolver span if the parent field resolver was not traced 1`] = `
 request:1
    finished: true
-   logs:
-   1. {"queryString":"query {\\n        a {\\n          one\\n          two\\n        }\\n        b {\\n          four\\n        }\\n      }"}
+
+   tags:
+   1. {"key":"queryString","value":"query {\\n        a {\\n          one\\n          two\\n        }\\n        b {\\n          four\\n        }\\n      }"}
 +-- b:2
       finished: true
+
    +-- four:3
          finished: true
+
 
 `;
 
 exports[`integration with apollo-server implements traces for arrays 1`] = `
 request:1
    finished: true
-   logs:
-   1. {"queryString":"query {\\n        as {\\n          one\\n          two\\n        }\\n      }"}
+
+   tags:
+   1. {"key":"queryString","value":"query {\\n        as {\\n          one\\n          two\\n        }\\n      }"}
 +-- as:2
       finished: true
+
    +-- one:3
          finished: true
+
    +-- two:4
          finished: true
+
    +-- one:5
          finished: true
+
    +-- two:6
          finished: true
+
    +-- one:7
          finished: true
+
    +-- two:8
          finished: true
+
 
 `;

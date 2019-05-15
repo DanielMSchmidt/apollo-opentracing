@@ -6,6 +6,7 @@ describe("Apollo Tracing", () => {
   beforeEach(() => {
     const span = {
       finish: jest.fn(),
+      setTag: jest.fn(),
       log: jest.fn()
     };
 
@@ -68,7 +69,7 @@ describe("Apollo Tracing", () => {
       const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
-      expect(server.span.log).toHaveBeenCalledWith({ queryString: "query {}" });
+      expect(server.span.setTag).toHaveBeenCalledWith("queryString", "query {}");
 
       cb();
       expect(server.span.finish).toHaveBeenCalled();
@@ -78,7 +79,7 @@ describe("Apollo Tracing", () => {
       const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
-      expect(server.span.log).toHaveBeenCalledWith({ queryString: "query {}" });
+      expect(server.span.setTag).toHaveBeenCalledWith("queryString", "query {}");
 
       cb(new Error("ups"));
       expect(server.span.finish).toHaveBeenCalled();

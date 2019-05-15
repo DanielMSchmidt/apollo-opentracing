@@ -4,6 +4,7 @@ export interface MockSpan {
   name: string;
   options?: any;
   logs: any[];
+  tags: any[];
   finished: boolean;
 }
 
