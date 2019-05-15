@@ -99,6 +99,10 @@ When the request is not traced there will also be no traces of the field resolve
 
 There might be certain field resolvers that are not worth the tracing, e.g. when they get a value out of an object and need no further tracing. To control if you want a field resolver to be traced you can pass the `shouldTraceFieldResolver` option to the constructor. The function is called with the same arguments as your field resolver and you can get the name of the field by `info.fieldName`. When you return false no traces will be made of this field resolvers and all underlying ones.
 
+## Modifying span metadata
+
+If you'd like to add custom tags or logs to span you can construct the extension with `onRequestResolve`. The function is called with two arguments: span and infos `onRequestResolve?: (span: Span, info: RequestStart)`
+
 ## Contributing
 
 Please feel free to add issues with new ideas, bugs and anything that might come up.

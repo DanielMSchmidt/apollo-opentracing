@@ -6,6 +6,7 @@ import { Request } from "apollo-server-env";
 import { SpanContext, addContextHelpers } from "./context";
 
 const alwaysTrue = () => true;
+const emptyFunction = () => {};
 
 interface InitOptions {
   server?: Tracer;
@@ -24,6 +25,7 @@ interface InitOptions {
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => boolean;
+  onRequestResolve?: (span: Span, info: RequestStart) => void;
 }
 
 interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
@@ -74,6 +76,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => boolean;
+  private onRequestResolve: (span: Span, info: RequestStart) => void;
 
   constructor({
     server,
@@ -81,7 +84,8 @@ export default class OpentracingExtension<TContext extends SpanContext>
     shouldTraceRequest,
     shouldTraceFieldResolver,
     onFieldResolveFinish,
-    onFieldResolve
+    onFieldResolve,
+    onRequestResolve
   }: InitOptions = {}) {
     if (!server) {
       throw new Error(
@@ -102,6 +106,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     this.shouldTraceFieldResolver = shouldTraceFieldResolver || alwaysTrue;
     this.onFieldResolveFinish = onFieldResolveFinish;
     this.onFieldResolve = onFieldResolve;
+    this.onRequestResolve = onRequestResolve || emptyFunction;
   }
 
   mapToObj(inputMap: Map<string, any>) {
@@ -139,7 +144,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
       childOf: externalSpan ? externalSpan : undefined
     });
 
-    rootSpan.setTag("queryString", infos.queryString);
+    this.onRequestResolve(rootSpan, infos);
     this.requestSpan = rootSpan;
 
     return () => {

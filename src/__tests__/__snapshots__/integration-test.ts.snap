@@ -4,8 +4,6 @@ exports[`integration with apollo-server alias with fragment works 1`] = `
 request:1
    finished: true
 
-   tags:
-   1. {"key":"queryString","value":"\\n        fragment F on A {\\n          dos: two\\n        }\\n\\n        query {\\n        a {\\n          ...F\\n        }\\n      }"}
 +-- a:2
       finished: true
 
@@ -19,8 +17,6 @@ exports[`integration with apollo-server alias works 1`] = `
 request:1
    finished: true
 
-   tags:
-   1. {"key":"queryString","value":"query {\\n        a {\\n          uno: one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
 
@@ -37,8 +33,6 @@ exports[`integration with apollo-server correct span nesting 1`] = `
 request:1
    finished: true
 
-   tags:
-   1. {"key":"queryString","value":"query {\\n        a {\\n          one\\n          two\\n        }\\n      }"}
 +-- a:2
       finished: true
 
@@ -55,8 +49,6 @@ exports[`integration with apollo-server does not start a field resolver span if 
 request:1
    finished: true
 
-   tags:
-   1. {"key":"queryString","value":"query {\\n        a {\\n          one\\n          two\\n        }\\n        b {\\n          four\\n        }\\n      }"}
 +-- b:2
       finished: true
 
@@ -70,8 +62,6 @@ exports[`integration with apollo-server implements traces for arrays 1`] = `
 request:1
    finished: true
 
-   tags:
-   1. {"key":"queryString","value":"query {\\n        as {\\n          one\\n          two\\n        }\\n      }"}
 +-- as:2
       finished: true
 
