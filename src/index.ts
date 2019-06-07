@@ -5,6 +5,8 @@ import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
 import { SpanContext, addContextHelpers } from "./context";
 
+export { SpanContext, addContextHelpers };
+
 const alwaysTrue = () => true;
 const emptyFunction = () => {};
 
@@ -112,8 +114,8 @@ export default class OpentracingExtension<TContext extends SpanContext>
   mapToObj(inputMap: Map<string, any>) {
     let obj: { [key: string]: string } = {};
 
-    inputMap.forEach(function(value, key){
-      obj[key] = value
+    inputMap.forEach(function(value, key) {
+      obj[key] = value;
     });
 
     return obj;
@@ -124,20 +126,18 @@ export default class OpentracingExtension<TContext extends SpanContext>
       return;
     }
 
-    let headers
-    let tmpHeaders = infos.request && infos.request.headers as unknown as Map<string, any>
-    if (tmpHeaders && typeof tmpHeaders.get === 'function') {
-      headers = this.mapToObj(tmpHeaders)
+    let headers;
+    let tmpHeaders =
+      infos.request && ((infos.request.headers as unknown) as Map<string, any>);
+    if (tmpHeaders && typeof tmpHeaders.get === "function") {
+      headers = this.mapToObj(tmpHeaders);
     } else {
-      headers = tmpHeaders
+      headers = tmpHeaders;
     }
 
     const externalSpan =
       infos.request && infos.request.headers
-        ? this.serverTracer.extract(
-            opentracing.FORMAT_HTTP_HEADERS,
-            headers
-          )
+        ? this.serverTracer.extract(opentracing.FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
     const rootSpan = this.serverTracer.startSpan("request", {
