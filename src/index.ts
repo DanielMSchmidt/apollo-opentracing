@@ -1,16 +1,16 @@
-import * as opentracing from "opentracing";
-import { GraphQLResolveInfo, DocumentNode } from "graphql";
-import { GraphQLExtension } from "graphql-extensions";
-import { Tracer, Span } from "opentracing";
 import { Request } from "apollo-server-env";
-import { SpanContext, addContextHelpers } from "./context";
+import { GraphQLRequestContext } from "apollo-server-types";
+import { DocumentNode, GraphQLResolveInfo } from "graphql";
+import { GraphQLExtension } from "graphql-extensions";
+import { FORMAT_HTTP_HEADERS, Span, Tracer } from "opentracing";
+import { addContextHelpers, SpanContext } from "./context";
 
 export { SpanContext, addContextHelpers };
 
 const alwaysTrue = () => true;
 const emptyFunction = () => {};
 
-export interface InitOptions {
+export interface InitOptions<TContext> {
   server?: Tracer;
   local?: Tracer;
   onFieldResolveFinish?: (error: Error | null, result: any, span: Span) => void;
@@ -20,20 +20,20 @@ export interface InitOptions {
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => void;
-  shouldTraceRequest?: (info: RequestStart) => boolean;
+  shouldTraceRequest?: (info: RequestStart<TContext>) => boolean;
   shouldTraceFieldResolver?: (
     source: any,
     args: { [argName: string]: any },
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => boolean;
-  onRequestResolve?: (span: Span, info: RequestStart) => void;
+  onRequestResolve?: (span: Span, info: RequestStart<TContext>) => void;
 }
 
 export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
   span?: Span;
 }
-export interface RequestStart {
+export interface RequestStart<TContext> {
   request: Pick<Request, "url" | "method" | "headers">;
   queryString?: string;
   parsedQuery?: DocumentNode;
@@ -41,6 +41,8 @@ export interface RequestStart {
   variables?: { [key: string]: any };
   persistedQueryHit?: boolean;
   persistedQueryRegister?: boolean;
+  context: TContext;
+  requestContext: GraphQLRequestContext<TContext>;
 }
 
 function getFieldName(info: GraphQLResolveInfo) {
@@ -71,14 +73,14 @@ export default class OpentracingExtension<TContext extends SpanContext>
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => void;
-  private shouldTraceRequest: (info: RequestStart) => boolean;
+  private shouldTraceRequest: (info: RequestStart<TContext>) => boolean;
   private shouldTraceFieldResolver: (
     source: any,
     args: { [argName: string]: any },
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => boolean;
-  private onRequestResolve: (span: Span, info: RequestStart) => void;
+  private onRequestResolve: (span: Span, info: RequestStart<TContext>) => void;
 
   constructor({
     server,
@@ -88,7 +90,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     onFieldResolveFinish,
     onFieldResolve,
     onRequestResolve
-  }: InitOptions = {}) {
+  }: InitOptions<TContext> = {}) {
     if (!server) {
       throw new Error(
         "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
@@ -121,7 +123,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     return obj;
   }
 
-  requestDidStart(infos: RequestStart) {
+  requestDidStart(infos: RequestStart<TContext>) {
     if (!this.shouldTraceRequest(infos)) {
       return;
     }
@@ -137,7 +139,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
 
     const externalSpan =
       infos.request && infos.request.headers
-        ? this.serverTracer.extract(opentracing.FORMAT_HTTP_HEADERS, headers)
+        ? this.serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
     const rootSpan = this.serverTracer.startSpan("request", {
