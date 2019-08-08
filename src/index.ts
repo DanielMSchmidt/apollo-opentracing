@@ -30,10 +30,10 @@ export interface InitOptions {
   onRequestResolve?: (span: Span, info: RequestStart) => void;
 }
 
-interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
+export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
   span?: Span;
 }
-interface RequestStart {
+export interface RequestStart {
   request: Pick<Request, "url" | "method" | "headers">;
   queryString?: string;
   parsedQuery?: DocumentNode;
