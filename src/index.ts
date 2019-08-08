@@ -10,7 +10,7 @@ export { SpanContext, addContextHelpers };
 const alwaysTrue = () => true;
 const emptyFunction = () => {};
 
-interface InitOptions {
+export interface InitOptions {
   server?: Tracer;
   local?: Tracer;
   onFieldResolveFinish?: (error: Error | null, result: any, span: Span) => void;
