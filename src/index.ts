@@ -89,7 +89,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
     shouldTraceFieldResolver,
     onFieldResolveFinish,
     onFieldResolve,
-    onRequestResolve
+    onRequestResolve,
   }: InitOptions<TContext> = {}) {
     if (!server) {
       throw new Error(
@@ -116,7 +116,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
   mapToObj(inputMap: Map<string, any>) {
     let obj: { [key: string]: string } = {};
 
-    inputMap.forEach(function(value, key) {
+    inputMap.forEach(function (value, key) {
       obj[key] = value;
     });
 
@@ -142,9 +142,12 @@ export default class OpentracingExtension<TContext extends SpanContext>
         ? this.serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
-    const rootSpan = this.serverTracer.startSpan("request", {
-      childOf: externalSpan ? externalSpan : undefined
-    });
+    const rootSpan = this.serverTracer.startSpan(
+      infos.operationName || "request",
+      {
+        childOf: externalSpan ? externalSpan : undefined,
+      }
+    );
 
     this.onRequestResolve(rootSpan, infos);
     this.requestSpan = rootSpan;
@@ -181,7 +184,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
         : this.requestSpan;
 
     const span = this.localTracer.startSpan(name, {
-      childOf: parentSpan || undefined
+      childOf: parentSpan || undefined,
     });
 
     context.addSpan(span, info);
