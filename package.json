@@ -57,6 +57,6 @@
     "supertest": "4.0.2",
     "travis-deploy-once": "5.0.11",
     "ts-jest": "23.1.4",
-    "typescript": "3.5.3"
+    "typescript": "3.9.5"
   }
 }
