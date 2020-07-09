@@ -125,6 +125,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://keybase.io/mwieczorek"><img src="https://avatars2.githubusercontent.com/u/7051680?v=4" width="100px;" alt=""/><br /><sub><b>Michał Wieczorek</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=mwieczorek" title="Code">💻</a></td>
     <td align="center"><a href="https://koen.pt"><img src="https://avatars2.githubusercontent.com/u/351038?v=4" width="100px;" alt=""/><br /><sub><b>Koen Punt</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=koenpunt" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/zekenie"><img src="https://avatars2.githubusercontent.com/u/962281?v=4" width="100px;" alt=""/><br /><sub><b>Zeke Nierenberg</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=zekenie" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
