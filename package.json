@@ -8,6 +8,7 @@
     "clean": "rm -rf dist",
     "compile": "tsc",
     "prepare": "npm run clean && npm run compile",
+    "pretest": "npm run compile",
     "test": "jest",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once --pro",
