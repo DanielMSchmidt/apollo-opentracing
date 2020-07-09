@@ -58,6 +58,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mwieczorek",
+      "name": "Michał Wieczorek",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7051680?v=4",
+      "profile": "https://keybase.io/mwieczorek",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "none"
