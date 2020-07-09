@@ -85,6 +85,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "voslartomas",
+      "name": "Tomáš Voslař",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1945040?v=4",
+      "profile": "https://app.sport-buddy.net",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "none"
