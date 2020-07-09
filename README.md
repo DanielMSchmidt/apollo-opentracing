@@ -113,9 +113,27 @@ Let's make performance measurement to everyone <3
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars2.githubusercontent.com/u/1337046?v=4" width="100px;"/><br /><sub><b>Daniel Schmidt</b></sub>](http://danielmschmidt.de/)<br />[💻](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=DanielMSchmidt "Code") [🤔](#ideas-DanielMSchmidt "Ideas, Planning, & Feedback") | [<img src="https://avatars2.githubusercontent.com/u/3578740?v=4" width="100px;"/><br /><sub><b>Ciaran Liedeman</b></sub>](https://github.com/cliedeman)<br />[🐛](https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3Acliedeman "Bug reports") [💻](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman "Code") [⚠️](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman "Tests") | [<img src="https://avatars3.githubusercontent.com/u/453031?v=4" width="100px;"/><br /><sub><b>Jens Ulrich Hjuler Pedersen</b></sub>](http://juhp.net)<br />[🐛](https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3AMultiply "Bug reports") [🤔](#ideas-Multiply "Ideas, Planning, & Feedback") [👀](#review-Multiply "Reviewed Pull Requests") | [<img src="https://avatars0.githubusercontent.com/u/9115596?v=4" width="100px;"/><br /><sub><b>Francesca</b></sub>](https://github.com/frances3006)<br />[💻](https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=frances3006 "Code") |
-| :---: | :---: | :---: | :---: |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://danielmschmidt.de/"><img src="https://avatars2.githubusercontent.com/u/1337046?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Schmidt</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=DanielMSchmidt" title="Code">💻</a> <a href="#ideas-DanielMSchmidt" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/cliedeman"><img src="https://avatars2.githubusercontent.com/u/3578740?v=4" width="100px;" alt=""/><br /><sub><b>Ciaran Liedeman</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3Acliedeman" title="Bug reports">🐛</a> <a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman" title="Code">💻</a> <a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=cliedeman" title="Tests">⚠️</a></td>
+    <td align="center"><a href="http://juhp.net"><img src="https://avatars3.githubusercontent.com/u/453031?v=4" width="100px;" alt=""/><br /><sub><b>Jens Ulrich Hjuler Pedersen</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3AMultiply" title="Bug reports">🐛</a> <a href="#ideas-Multiply" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/DanielMSchmidt/apollo-opentracing/pulls?q=is%3Apr+reviewed-by%3AMultiply" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/frances3006"><img src="https://avatars0.githubusercontent.com/u/9115596?v=4" width="100px;" alt=""/><br /><sub><b>Francesca</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=frances3006" title="Code">💻</a></td>
+    <td align="center"><a href="https://analogic.al"><img src="https://avatars2.githubusercontent.com/u/84963?v=4" width="100px;" alt=""/><br /><sub><b>Ricardo Casares</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=ricardocasares" title="Code">💻</a></td>
+    <td align="center"><a href="https://keybase.io/mwieczorek"><img src="https://avatars2.githubusercontent.com/u/7051680?v=4" width="100px;" alt=""/><br /><sub><b>Michał Wieczorek</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=mwieczorek" title="Code">💻</a></td>
+    <td align="center"><a href="https://koen.pt"><img src="https://avatars2.githubusercontent.com/u/351038?v=4" width="100px;" alt=""/><br /><sub><b>Koen Punt</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=koenpunt" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/zekenie"><img src="https://avatars2.githubusercontent.com/u/962281?v=4" width="100px;" alt=""/><br /><sub><b>Zeke Nierenberg</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=zekenie" title="Code">💻</a></td>
+    <td align="center"><a href="https://app.sport-buddy.net"><img src="https://avatars3.githubusercontent.com/u/1945040?v=4" width="100px;" alt=""/><br /><sub><b>Tomáš Voslař</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=voslartomas" title="Code">💻</a></td>
+    <td align="center"><a href="http://iam.benkimball.com/"><img src="https://avatars2.githubusercontent.com/u/40365?v=4" width="100px;" alt=""/><br /><sub><b>Ben Kimball</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=benkimball" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

@@ -49,6 +49,61 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ricardocasares",
+      "name": "Ricardo Casares",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/84963?v=4",
+      "profile": "https://analogic.al",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mwieczorek",
+      "name": "Michał Wieczorek",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7051680?v=4",
+      "profile": "https://keybase.io/mwieczorek",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "koenpunt",
+      "name": "Koen Punt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/351038?v=4",
+      "profile": "https://koen.pt",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "zekenie",
+      "name": "Zeke Nierenberg",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/962281?v=4",
+      "profile": "https://github.com/zekenie",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "voslartomas",
+      "name": "Tomáš Voslař",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1945040?v=4",
+      "profile": "https://app.sport-buddy.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "benkimball",
+      "name": "Ben Kimball",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/40365?v=4",
+      "profile": "http://iam.benkimball.com/",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "commitConvention": "none"
 }
