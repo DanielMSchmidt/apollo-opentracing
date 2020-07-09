@@ -94,6 +94,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benkimball",
+      "name": "Ben Kimball",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/40365?v=4",
+      "profile": "http://iam.benkimball.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "none"

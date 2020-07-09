@@ -128,6 +128,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   <tr>
     <td align="center"><a href="https://github.com/zekenie"><img src="https://avatars2.githubusercontent.com/u/962281?v=4" width="100px;" alt=""/><br /><sub><b>Zeke Nierenberg</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=zekenie" title="Code">💻</a></td>
     <td align="center"><a href="https://app.sport-buddy.net"><img src="https://avatars3.githubusercontent.com/u/1945040?v=4" width="100px;" alt=""/><br /><sub><b>Tomáš Voslař</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=voslartomas" title="Code">💻</a></td>
+    <td align="center"><a href="http://iam.benkimball.com/"><img src="https://avatars2.githubusercontent.com/u/40365?v=4" width="100px;" alt=""/><br /><sub><b>Ben Kimball</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=benkimball" title="Code">💻</a></td>
   </tr>
 </table>
 
