@@ -23,6 +23,8 @@ export interface SpanContext extends Object {
   _spans: Map<string, Span>;
   getSpanByPath(info: ResponsePath): Span | undefined;
   addSpan(span: Span, info: GraphQLResolveInfo): void;
+  // Passed in from the outside context
+  requestSpan?: Span;
 }
 
 function isSpanContext(obj: any): obj is SpanContext {
@@ -38,11 +40,11 @@ export function addContextHelpers(obj: any): SpanContext {
   }
 
   obj._spans = new Map<string, Span>();
-  obj.getSpanByPath = function(path: ResponsePath): Span | undefined {
+  obj.getSpanByPath = function (path: ResponsePath): Span | undefined {
     return this._spans.get(buildPath(isArrayPath(path) ? path.prev : path));
   };
 
-  obj.addSpan = function(span: Span, info: GraphQLResolveInfo): void {
+  obj.addSpan = function (span: Span, info: GraphQLResolveInfo): void {
     this._spans.set(buildPath(info.path), span);
   };
 

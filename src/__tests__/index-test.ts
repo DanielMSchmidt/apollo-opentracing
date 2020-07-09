@@ -7,26 +7,26 @@ describe("Apollo Tracing", () => {
     const span = {
       finish: jest.fn(),
       setTag: jest.fn(),
-      log: jest.fn()
+      log: jest.fn(),
     };
 
     server = {
       span,
       startSpan: jest.fn(() => span),
       inject: jest.fn(),
-      extract: jest.fn()
+      extract: jest.fn(),
     };
 
     local = {
       span,
       startSpan: jest.fn(() => span),
       inject: jest.fn(),
-      extract: jest.fn()
+      extract: jest.fn(),
     };
 
     tracingMiddleware = new ApolloOpentracing({
       server,
-      local
+      local,
     });
   });
 
@@ -66,7 +66,10 @@ describe("Apollo Tracing", () => {
 
   describe("request spans", () => {
     it("starts and finishes a request spans if there are no errors", () => {
-      const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
+      const cb = tracingMiddleware.requestDidStart({
+        queryString: "query {}",
+        context: {},
+      });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
 
@@ -75,7 +78,10 @@ describe("Apollo Tracing", () => {
     });
 
     it("starts and finishes a request spans if there are errors", () => {
-      const cb = tracingMiddleware.requestDidStart({ queryString: "query {}" });
+      const cb = tracingMiddleware.requestDidStart({
+        queryString: "query {}",
+        context: {},
+      });
       expect(server.startSpan).toHaveBeenCalled();
       expect(local.startSpan).not.toHaveBeenCalled();
 
@@ -88,12 +94,12 @@ describe("Apollo Tracing", () => {
       tracingMiddleware = new ApolloOpentracing({
         server,
         local,
-        shouldTraceRequest
+        shouldTraceRequest,
       });
 
       tracingMiddleware.requestDidStart({ queryString: "query {}" });
       expect(shouldTraceRequest).toHaveBeenCalledWith({
-        queryString: "query {}"
+        queryString: "query {}",
       });
     });
 
@@ -102,7 +108,7 @@ describe("Apollo Tracing", () => {
       tracingMiddleware = new ApolloOpentracing({
         server,
         local,
-        shouldTraceRequest
+        shouldTraceRequest,
       });
 
       tracingMiddleware.requestDidStart({ queryString: "query {}" });
@@ -113,20 +119,37 @@ describe("Apollo Tracing", () => {
       server.extract.mockReturnValue({ spanId: 42 });
       tracingMiddleware.requestDidStart({
         queryString: "query {}",
+        context: {},
         request: {
           headers: {
             "X-B3-ParentSpanId": "a33c27ae31f3c9e9",
             "X-B3-Sampled": 1,
             "X-B3-SpanId": "42483bbd28a757b4",
-            "X-B3-TraceId": "a33c27ae31f3c9e9"
-          }
-        }
+            "X-B3-TraceId": "a33c27ae31f3c9e9",
+          },
+        },
       });
 
       expect(server.extract).toHaveBeenCalled();
       expect(server.startSpan).toHaveBeenCalledWith(expect.any(String), {
-        childOf: { spanId: 42 }
+        childOf: { spanId: 42 },
       });
+    });
+
+    it("uses an existing span if possible and finishes it", () => {
+      const requestSpan = {
+        finish: jest.fn(),
+        setTag: jest.fn(),
+        log: jest.fn(),
+      };
+      const cb = tracingMiddleware.requestDidStart({
+        queryString: "query {}",
+        context: { requestSpan },
+      });
+      expect(server.startSpan).not.toHaveBeenCalled();
+
+      cb();
+      expect(requestSpan.finish).toHaveBeenCalled();
     });
   });
 
@@ -151,7 +174,7 @@ describe("Apollo Tracing", () => {
         {},
         {},
         {
-          fieldName: "myField"
+          fieldName: "myField",
         }
       );
       expect(local.startSpan).toHaveBeenCalledWith(
@@ -168,10 +191,10 @@ describe("Apollo Tracing", () => {
       ctx.addSpan({ id: "42" }, { path: { key: "previous" } });
 
       tracingMiddleware.willResolveField({}, {}, ctx, {
-        path: { key: "b", prev: { key: "previous" } }
+        path: { key: "b", prev: { key: "previous" } },
       });
       expect(local.startSpan).toHaveBeenCalledWith("field", {
-        childOf: { id: "42" }
+        childOf: { id: "42" },
       });
     });
 
@@ -179,7 +202,7 @@ describe("Apollo Tracing", () => {
       tracingMiddleware.requestSpan = { id: "23" };
       tracingMiddleware.willResolveField({}, {}, {}, {});
       expect(local.startSpan).toHaveBeenCalledWith("field", {
-        childOf: { id: "23" }
+        childOf: { id: "23" },
       });
     });
 
@@ -193,7 +216,7 @@ describe("Apollo Tracing", () => {
       tracingMiddleware = new ApolloOpentracing({
         server,
         local,
-        shouldTraceFieldResolver
+        shouldTraceFieldResolver,
       });
       tracingMiddleware.requestSpan = { id: "23" };
       tracingMiddleware.willResolveField(
@@ -233,7 +256,7 @@ describe("Apollo Tracing", () => {
       tracingMiddleware = new ApolloOpentracing({
         server,
         local,
-        onFieldResolve
+        onFieldResolve,
       });
       tracingMiddleware.requestSpan = { id: "23" };
       const info = {};
@@ -247,7 +270,7 @@ describe("Apollo Tracing", () => {
       tracingMiddleware = new ApolloOpentracing({
         server,
         local,
-        onFieldResolveFinish
+        onFieldResolveFinish,
       });
       tracingMiddleware.requestSpan = { id: "23" };
       const result = { data: { id: "42" } };
@@ -261,7 +284,7 @@ describe("Apollo Tracing", () => {
         local.span
       );
       expect(local.span.log).not.toHaveBeenCalledWith({
-        result: JSON.stringify(result)
+        result: JSON.stringify(result),
       });
     });
 
