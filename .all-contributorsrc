@@ -67,6 +67,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "koenpunt",
+      "name": "Koen Punt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/351038?v=4",
+      "profile": "https://koen.pt",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "none"

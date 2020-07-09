@@ -123,6 +123,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://github.com/frances3006"><img src="https://avatars0.githubusercontent.com/u/9115596?v=4" width="100px;" alt=""/><br /><sub><b>Francesca</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=frances3006" title="Code">💻</a></td>
     <td align="center"><a href="https://analogic.al"><img src="https://avatars2.githubusercontent.com/u/84963?v=4" width="100px;" alt=""/><br /><sub><b>Ricardo Casares</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=ricardocasares" title="Code">💻</a></td>
     <td align="center"><a href="https://keybase.io/mwieczorek"><img src="https://avatars2.githubusercontent.com/u/7051680?v=4" width="100px;" alt=""/><br /><sub><b>Michał Wieczorek</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=mwieczorek" title="Code">💻</a></td>
+    <td align="center"><a href="https://koen.pt"><img src="https://avatars2.githubusercontent.com/u/351038?v=4" width="100px;" alt=""/><br /><sub><b>Koen Punt</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=koenpunt" title="Code">💻</a></td>
   </tr>
 </table>
 
