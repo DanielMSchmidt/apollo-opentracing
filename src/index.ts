@@ -142,12 +142,11 @@ export default class OpentracingExtension<TContext extends SpanContext>
         ? this.serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
-    const rootSpan = this.serverTracer.startSpan(
-      infos.operationName || "request",
-      {
+    const rootSpan =
+      infos.context.requestSpan ||
+      this.serverTracer.startSpan(infos.operationName || "request", {
         childOf: externalSpan ? externalSpan : undefined,
-      }
-    );
+      });
 
     this.onRequestResolve(rootSpan, infos);
     this.requestSpan = rootSpan;

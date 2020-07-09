@@ -103,6 +103,19 @@ There might be certain field resolvers that are not worth the tracing, e.g. when
 
 If you'd like to add custom tags or logs to span you can construct the extension with `onRequestResolve`. The function is called with two arguments: span and infos `onRequestResolve?: (span: Span, info: RequestStart)`
 
+## Using your own request span
+
+If you need to take control of initializing the request span (e.g because you need to use it during context initialization) you can do so by having creating it as `context.requestSpan`.
+
+## Options
+
+- `server`: Opentracing Tracer for the incoming request
+- `local`: Opentracing Tracer for the local and outgoing requests
+- `onFieldResolveFinish(error: Error | null, result: any, span: Span)`: Callback after a field was resolved
+- `onFieldResolve(source: any, args: { [argName: string]: any }, context: SpanContext, info: GraphQLResolveInfo)`: Allow users to add extra information to the span
+- `shouldTraceRequest` & `shouldTraceFieldResolver`: See [Selective Tracing](#selective-tracing)
+- `onRequestResolve(span: Span, info: GraphQLRequestContext)`: Add extra information to the request span
+
 ## Contributing
 
 Please feel free to add issues with new ideas, bugs and anything that might come up.
