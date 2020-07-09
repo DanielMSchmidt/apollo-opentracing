@@ -49,6 +49,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ricardocasares",
+      "name": "Ricardo Casares",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/84963?v=4",
+      "profile": "https://analogic.al",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "commitConvention": "none"
 }
