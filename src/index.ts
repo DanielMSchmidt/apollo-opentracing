@@ -1,9 +1,11 @@
 import { Request } from "apollo-server-env";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLRequestContext } from "apollo-server-types";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { GraphQLExtension } from "graphql-extensions";
 import { FORMAT_HTTP_HEADERS, Span, Tracer } from "opentracing";
-import { addContextHelpers, SpanContext } from "./context";
+import { addContextHelpers, makeContextHelper, SpanContext } from "./context";
 
 export { SpanContext, addContextHelpers };
 
@@ -17,17 +19,17 @@ export interface InitOptions<TContext> {
   onFieldResolve?: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => void;
-  shouldTraceRequest?: (info: RequestStart<TContext>) => boolean;
+  shouldTraceRequest?: (requestContext: GraphQLRequestContext<TContext>) => boolean;
   shouldTraceFieldResolver?: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => boolean;
-  onRequestResolve?: (span: Span, info: RequestStart<TContext>) => void;
+  onRequestResolve?: (span: Span, requestContext: GraphQLRequestContext<TContext>) => void;
 }
 
 export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
@@ -46,41 +48,33 @@ export interface RequestStart<TContext> {
 }
 
 function getFieldName(info: GraphQLResolveInfo) {
-  if (
-    info.fieldNodes &&
-    info.fieldNodes.length > 0 &&
-    info.fieldNodes[0].alias
-  ) {
+  if (info.fieldNodes && info.fieldNodes.length > 0 && info.fieldNodes[0].alias) {
     return info.fieldNodes[0].alias.value;
   }
 
   return info.fieldName || "field";
 }
 
-export default class OpentracingExtension<TContext extends SpanContext>
-  implements GraphQLExtension<TContext> {
+export default class ApolloTracingPlugin<TContext extends Record<string, unknown>> {
   private serverTracer: Tracer;
   private localTracer: Tracer;
   private requestSpan: Span | null;
-  private onFieldResolveFinish?: (
-    error: Error | null,
-    result: any,
-    span: Span
-  ) => void;
+  private onFieldResolveFinish?: (error: Error | null, result: any, span: Span) => void;
   private onFieldResolve?: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => void;
-  private shouldTraceRequest: (info: RequestStart<TContext>) => boolean;
+  private shouldTraceRequest: (requestContext: GraphQLRequestContext<TContext>) => boolean;
   private shouldTraceFieldResolver: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => boolean;
-  private onRequestResolve: (span: Span, info: RequestStart<TContext>) => void;
+  private onRequestResolve: (span: Span, requestContext: GraphQLRequestContext<TContext>) => void;
+  private requests: WeakMap<TContext, SpanContext> = new WeakMap<TContext, SpanContext>();
 
   constructor({
     server,
@@ -114,7 +108,7 @@ export default class OpentracingExtension<TContext extends SpanContext>
   }
 
   mapToObj(inputMap: Map<string, any>) {
-    let obj: { [key: string]: string } = {};
+    const obj: { [key: string]: string } = {};
 
     inputMap.forEach(function (value, key) {
       obj[key] = value;
@@ -123,14 +117,24 @@ export default class OpentracingExtension<TContext extends SpanContext>
     return obj;
   }
 
-  requestDidStart(infos: RequestStart<TContext>) {
-    if (!this.shouldTraceRequest(infos)) {
+  getPlugin() {
+    return {
+      requestDidStart: this.requestDidStart.bind(this),
+    };
+  }
+
+  requestDidStart(requestContext: GraphQLRequestContext<TContext>) {
+    if (!this.shouldTraceRequest(requestContext)) {
       return;
     }
 
+    this.requests.set(requestContext.context, makeContextHelper());
+
     let headers;
-    let tmpHeaders =
-      infos.request && ((infos.request.headers as unknown) as Map<string, any>);
+    const tmpHeaders =
+      requestContext.request &&
+      requestContext.request.http &&
+      ((requestContext.request.http.headers as unknown) as Map<string, any>);
     if (tmpHeaders && typeof tmpHeaders.get === "function") {
       headers = this.mapToObj(tmpHeaders);
     } else {
@@ -138,55 +142,62 @@ export default class OpentracingExtension<TContext extends SpanContext>
     }
 
     const externalSpan =
-      infos.request && infos.request.headers
+      requestContext.request && requestContext.request.http && requestContext.request.http.headers
         ? this.serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
+    const requestHelper = this.requests.get(requestContext.context)!;
+
     const rootSpan =
-      infos.context.requestSpan ||
-      this.serverTracer.startSpan(infos.operationName || "request", {
+      requestHelper.requestSpan ||
+      this.serverTracer.startSpan(requestContext.operationName || "request", {
         childOf: externalSpan ? externalSpan : undefined,
       });
 
-    this.onRequestResolve(rootSpan, infos);
+    this.onRequestResolve(rootSpan, requestContext);
     this.requestSpan = rootSpan;
 
-    return () => {
-      rootSpan.finish();
+    return {
+      executionDidStart: () => ({
+        willResolveField: this.willResolveField.bind(this),
+      }),
+      willSendResponse: this.willSendResponse.bind(this),
     };
   }
 
-  willResolveField(
-    source: any,
-    args: { [argName: string]: any },
-    context: TContext,
-    info: ExtendedGraphQLResolveInfo
-  ) {
+  willResolveField({
+    source,
+    args,
+    context,
+    info,
+  }: {
+    source: any;
+    args: { [argName: string]: any };
+    context: TContext;
+    info: ExtendedGraphQLResolveInfo;
+  }) {
+    const requestHelper = this.requests.get(context)!;
+
     if (
       // we don't trace the request
       !this.requestSpan ||
       // we should not trace this resolver
       !this.shouldTraceFieldResolver(source, args, context, info) ||
       // the previous resolver was not traced
-      (info.path && info.path.prev && !context.getSpanByPath(info.path.prev))
+      (info.path && info.path.prev && !requestHelper.getSpanByPath(info.path.prev))
     ) {
       return;
     }
 
-    // idempotent method to add helpers to the first context available (which will be propagated by apollo)
-    addContextHelpers(context);
-
     const name = getFieldName(info);
     const parentSpan =
-      info.path && info.path.prev
-        ? context.getSpanByPath(info.path.prev)
-        : this.requestSpan;
+      info.path && info.path.prev ? requestHelper.getSpanByPath(info.path.prev) : this.requestSpan;
 
     const span = this.localTracer.startSpan(name, {
       childOf: parentSpan || undefined,
     });
 
-    context.addSpan(span, info);
+    requestHelper.addSpan(span, info);
     // expose to field
     info.span = span;
 
@@ -200,5 +211,11 @@ export default class OpentracingExtension<TContext extends SpanContext>
       }
       span.finish();
     };
+  }
+
+  willSendResponse() {
+    if (this.requestSpan) {
+      this.requestSpan.finish();
+    }
   }
 }

@@ -19,10 +19,14 @@ export function buildPath(path: ResponsePath | undefined) {
   return segments.reverse().join(".");
 }
 
-export interface SpanContext extends Object {
-  _spans: Map<string, Span>;
-  getSpanByPath(info: ResponsePath): Span | undefined;
-  addSpan(span: Span, info: GraphQLResolveInfo): void;
+export class SpanContext {
+  _spans = new Map<string, Span>();
+  getSpanByPath(path: ResponsePath): Span | undefined {
+    return this._spans.get(buildPath(isArrayPath(path) ? path.prev : path));
+  };
+  addSpan(span: Span, info: GraphQLResolveInfo): void {
+    this._spans.set(buildPath(info.path), span);
+  };
   // Passed in from the outside context
   requestSpan?: Span;
 }
@@ -49,4 +53,8 @@ export function addContextHelpers(obj: any): SpanContext {
   };
 
   return obj;
+}
+
+export function makeContextHelper() {
+  return new SpanContext();
 }
