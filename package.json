@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/graphql": "14.2.3",
     "@types/jest": "23.3.14",
-    "@types/node": "11.15.31",
+    "@types/node": "11.15.32",
     "all-contributors-cli": "6.19.0",
     "apollo-server": "2.6.8",
     "apollo-server-env": "2.4.0",
