@@ -51,7 +51,7 @@
     "express": "4.17.1",
     "graphql": "14.7.0",
     "graphql-tools": "4.0.8",
-    "jest": "23.6.0",
+    "jest": "26.6.0",
     "opentracing": "0.14.4",
     "semantic-release": "15.14.0",
     "supertest": "4.0.2",
