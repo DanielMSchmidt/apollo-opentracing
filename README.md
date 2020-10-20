@@ -25,14 +25,14 @@ We need two types of tracer (which could be identical if you like):
 ```diff
 const { graphqlExpress } = require("apollo-server-express");
 const {serverTracer, localTracer} = require("./tracer");
-+const OpentracingExtension = require("apollo-opentracing").default;
++const OpentracingPlugin = require("apollo-opentracing").default;
 
 app.use(
   "/graphql",
   bodyParser.json(),
   graphqlExpress({
     schema,
-+   extensions: [() => new OpentracingExtension({
++   plugins: [OpentracingPlugin({
 +     server: serverTracer,
 +     local: localTracer,
 +   })]
