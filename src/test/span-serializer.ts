@@ -55,13 +55,7 @@ function buildSpan(span: MockSpanTree, depth = 0) {
 
 export default {
   test: (val: any) => val.id && val.name && val.logs && val.finished != null,
-  print(
-    val: any,
-    _serialize: ((val: any) => string),
-    _indent: ((str: string) => string),
-    _opts: jest.SnapshotSerializerOptions,
-    _colors: jest.SnapshotSerializerColors
-  ) {
+  print(val: any) {
     return buildSpan(val as MockSpanTree);
-  }
+  },
 };

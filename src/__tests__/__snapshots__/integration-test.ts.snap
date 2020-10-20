@@ -85,3 +85,80 @@ request:1
 
 
 `;
+
+exports[`integration with apollo-server onFieldResolve & onFieldResolveFinish 1`] = `
+request:1
+   finished: true
+
++-- a:2
+      finished: true
+      logs:
+      1. {"onFieldResolve":"yes"}
+      2. {"onFieldResolveFinish":"yes"}
+
+   +-- one:3
+         finished: true
+         logs:
+         1. {"onFieldResolve":"yes"}
+         2. {"onFieldResolveFinish":"yes"}
+
+   +-- two:4
+         finished: true
+         logs:
+         1. {"onFieldResolve":"yes"}
+         2. {"onFieldResolveFinish":"yes"}
+
++-- b:5
+      finished: true
+      logs:
+      1. {"onFieldResolve":"yes"}
+      2. {"onFieldResolveFinish":"yes"}
+
+   +-- four:6
+         finished: true
+         logs:
+         1. {"onFieldResolve":"yes"}
+         2. {"onFieldResolveFinish":"yes"}
+
+
+`;
+
+exports[`integration with apollo-server onRequestResolve 1`] = `
+request:1
+   finished: true
+   logs:
+   1. {"onRequestResolve":"yes"}
+
++-- a:2
+      finished: true
+
+   +-- one:3
+         finished: true
+
+   +-- two:4
+         finished: true
+
++-- b:5
+      finished: true
+
+   +-- four:6
+         finished: true
+
+
+`;
+
+exports[`integration with apollo-server picks up external spans 1`] = `
+external:-1
+   finished: false
+
++-- request:1
+      finished: true
+
+   +-- a:2
+         finished: true
+
+      +-- one:3
+            finished: true
+
+
+`;
