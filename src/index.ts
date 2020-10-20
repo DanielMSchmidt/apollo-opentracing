@@ -1,9 +1,18 @@
 import { Request } from "apollo-server-env";
-import { GraphQLRequestContext } from "apollo-server-types";
+import {
+  ApolloServerPlugin,
+  GraphQLRequestContext,
+  GraphQLRequestListener,
+  GraphQLRequestExecutionListener,
+  GraphQLFieldResolverParams,
+} from "apollo-server-plugin-base";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
-import { GraphQLExtension } from "graphql-extensions";
 import { FORMAT_HTTP_HEADERS, Span, Tracer } from "opentracing";
-import { addContextHelpers, SpanContext } from "./context";
+import {
+  addContextHelpers,
+  SpanContext,
+  requestIsInstanceContextRequest,
+} from "./context";
 
 export { SpanContext, addContextHelpers };
 
@@ -20,14 +29,17 @@ export interface InitOptions<TContext> {
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => void;
-  shouldTraceRequest?: (info: RequestStart<TContext>) => boolean;
+  shouldTraceRequest?: (info: GraphQLRequestContext<TContext>) => boolean;
   shouldTraceFieldResolver?: (
     source: any,
     args: { [argName: string]: any },
     context: SpanContext,
     info: GraphQLResolveInfo
   ) => boolean;
-  onRequestResolve?: (span: Span, info: RequestStart<TContext>) => void;
+  onRequestResolve?: (
+    span: Span,
+    info: GraphQLRequestContext<TContext>
+  ) => void;
 }
 
 export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
@@ -57,148 +69,137 @@ function getFieldName(info: GraphQLResolveInfo) {
   return info.fieldName || "field";
 }
 
-export default class OpentracingExtension<TContext extends SpanContext>
-  implements GraphQLExtension<TContext> {
-  private serverTracer: Tracer;
-  private localTracer: Tracer;
-  private requestSpan: Span | null;
-  private onFieldResolveFinish?: (
-    error: Error | null,
-    result: any,
-    span: Span
-  ) => void;
-  private onFieldResolve?: (
-    source: any,
-    args: { [argName: string]: any },
-    context: SpanContext,
-    info: GraphQLResolveInfo
-  ) => void;
-  private shouldTraceRequest: (info: RequestStart<TContext>) => boolean;
-  private shouldTraceFieldResolver: (
-    source: any,
-    args: { [argName: string]: any },
-    context: SpanContext,
-    info: GraphQLResolveInfo
-  ) => boolean;
-  private onRequestResolve: (span: Span, info: RequestStart<TContext>) => void;
-
-  constructor({
-    server,
-    local,
-    shouldTraceRequest,
-    shouldTraceFieldResolver,
-    onFieldResolveFinish,
-    onFieldResolve,
-    onRequestResolve,
-  }: InitOptions<TContext> = {}) {
-    if (!server) {
-      throw new Error(
-        "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
-      );
-    }
-
-    if (!local) {
-      throw new Error(
-        "ApolloOpentracing needs a local tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
-      );
-    }
-
-    this.serverTracer = server;
-    this.localTracer = local;
-    this.requestSpan = null;
-    this.shouldTraceRequest = shouldTraceRequest || alwaysTrue;
-    this.shouldTraceFieldResolver = shouldTraceFieldResolver || alwaysTrue;
-    this.onFieldResolveFinish = onFieldResolveFinish;
-    this.onFieldResolve = onFieldResolve;
-    this.onRequestResolve = onRequestResolve || emptyFunction;
+function headersToOject(
+  headerIterator: Iterator<[string, string], any, undefined> | undefined
+): Record<string, string> {
+  if (!headerIterator) {
+    return {};
   }
 
-  mapToObj(inputMap: Map<string, any>) {
-    let obj: { [key: string]: string } = {};
+  const headers: Record<string, string> = {};
+  let header:
+    | IteratorYieldResult<[string, string]>
+    | IteratorReturnResult<any>
+    | undefined;
+  do {
+    header = headerIterator?.next();
+    if (header?.value) {
+      const [key, value] = header?.value;
+      headers[key] = value;
+    }
+  } while (!header?.done);
 
-    inputMap.forEach(function (value, key) {
-      obj[key] = value;
-    });
+  return headers;
+}
 
-    return obj;
+export default function OpentracingPlugin<InstanceContext extends SpanContext>({
+  server,
+  local,
+  onFieldResolveFinish = emptyFunction,
+  onFieldResolve = emptyFunction,
+  shouldTraceRequest = alwaysTrue,
+  shouldTraceFieldResolver = alwaysTrue,
+  onRequestResolve = emptyFunction,
+}: InitOptions<InstanceContext>): ApolloServerPlugin<InstanceContext> {
+  if (!server) {
+    throw new Error(
+      "ApolloOpentracing needs a server tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
+    );
   }
 
-  requestDidStart(infos: RequestStart<TContext>) {
-    if (!this.shouldTraceRequest(infos)) {
-      return;
-    }
+  if (!local) {
+    throw new Error(
+      "ApolloOpentracing needs a local tracer, please provide it to the constructor. e.g. new ApolloOpentracing({ server: serverTracer, local: localTracer })"
+    );
+  }
+  const serverTracer = server;
+  const localTracer = local;
 
-    let headers;
-    let tmpHeaders =
-      infos.request && ((infos.request.headers as unknown) as Map<string, any>);
-    if (tmpHeaders && typeof tmpHeaders.get === "function") {
-      headers = this.mapToObj(tmpHeaders);
-    } else {
-      headers = tmpHeaders;
-    }
+  let requestSpan: Span | null = null;
+  return {
+    requestDidStart(
+      infos: GraphQLRequestContext<InstanceContext>
+    ): GraphQLRequestListener<InstanceContext> | void {
+      addContextHelpers(infos.context);
+      if (!requestIsInstanceContextRequest<InstanceContext>(infos)) {
+        console.warn(
+          "Context in request passed to apollo-opentracing#requestDidStart is not a SpanContext, aborting tracing"
+        );
+        return;
+      }
+      if (!shouldTraceRequest(infos)) {
+        return;
+      }
 
-    const externalSpan =
-      infos.request && infos.request.headers
-        ? this.serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
+      const headers = headersToOject(infos.request.http?.headers.entries());
+
+      const externalSpan = headers
+        ? serverTracer.extract(FORMAT_HTTP_HEADERS, headers)
         : undefined;
 
-    const rootSpan =
-      infos.context.requestSpan ||
-      this.serverTracer.startSpan(infos.operationName || "request", {
-        childOf: externalSpan ? externalSpan : undefined,
-      });
+      const rootSpan =
+        infos.context.requestSpan ||
+        serverTracer.startSpan(infos.operationName || "request", {
+          childOf: externalSpan ? externalSpan : undefined,
+        });
 
-    this.onRequestResolve(rootSpan, infos);
-    this.requestSpan = rootSpan;
+      onRequestResolve(rootSpan, infos);
+      requestSpan = rootSpan;
 
-    return () => {
-      rootSpan.finish();
-    };
-  }
+      return {
+        willSendResponse() {
+          rootSpan.finish();
+        },
 
-  willResolveField(
-    source: any,
-    args: { [argName: string]: any },
-    context: TContext,
-    info: ExtendedGraphQLResolveInfo
-  ) {
-    if (
-      // we don't trace the request
-      !this.requestSpan ||
-      // we should not trace this resolver
-      !this.shouldTraceFieldResolver(source, args, context, info) ||
-      // the previous resolver was not traced
-      (info.path && info.path.prev && !context.getSpanByPath(info.path.prev))
-    ) {
-      return;
-    }
+        executionDidStart(): GraphQLRequestExecutionListener<InstanceContext> {
+          return {
+            willResolveField({
+              source,
+              args,
+              context,
+              info,
+            }: GraphQLFieldResolverParams<any, InstanceContext>) {
+              if (
+                // we don't trace the request
+                !requestSpan ||
+                // we should not trace this resolver
+                !shouldTraceFieldResolver(source, args, context, info) ||
+                // the previous resolver was not traced
+                (info.path &&
+                  info.path.prev &&
+                  !context.getSpanByPath(info.path.prev))
+              ) {
+                return;
+              }
 
-    // idempotent method to add helpers to the first context available (which will be propagated by apollo)
-    addContextHelpers(context);
+              // idempotent method to add helpers to the first context available (which will be propagated by apollo)
+              addContextHelpers(context);
 
-    const name = getFieldName(info);
-    const parentSpan =
-      info.path && info.path.prev
-        ? context.getSpanByPath(info.path.prev)
-        : this.requestSpan;
+              const name = getFieldName(info);
+              const parentSpan =
+                info.path && info.path.prev
+                  ? context.getSpanByPath(info.path.prev)
+                  : requestSpan;
 
-    const span = this.localTracer.startSpan(name, {
-      childOf: parentSpan || undefined,
-    });
+              const span = localTracer.startSpan(name, {
+                childOf: parentSpan || undefined,
+              });
 
-    context.addSpan(span, info);
-    // expose to field
-    info.span = span;
+              context.addSpan(span, info);
+              // expose to field (although type does not contain it)
+              (info as any).span = span;
 
-    if (this.onFieldResolve) {
-      this.onFieldResolve(source, args, context, info);
-    }
+              onFieldResolve(source, args, context, info);
 
-    return (error: Error | null, result: any) => {
-      if (this.onFieldResolveFinish) {
-        this.onFieldResolveFinish(error, result, span);
-      }
-      span.finish();
-    };
-  }
+              return (error: Error | null, result: any) => {
+                onFieldResolveFinish(error, result, span);
+
+                span.finish();
+              };
+            },
+          };
+        },
+      };
+    },
+  };
 }

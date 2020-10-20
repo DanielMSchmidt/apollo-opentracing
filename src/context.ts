@@ -1,6 +1,6 @@
 import { Span } from "opentracing";
 import { GraphQLResolveInfo, ResponsePath } from "graphql";
-
+import { GraphQLRequestContext } from "apollo-server-plugin-base";
 function isArrayPath(path: ResponsePath) {
   return typeof path.key === "number";
 }
@@ -31,6 +31,12 @@ function isSpanContext(obj: any): obj is SpanContext {
   return (
     obj.getSpanByPath instanceof Function && obj.addSpan instanceof Function
   );
+}
+
+export function requestIsInstanceContextRequest<CTX extends SpanContext>(
+  request: GraphQLRequestContext<CTX | Object>
+): request is GraphQLRequestContext<CTX> {
+  return isSpanContext(request.context);
 }
 
 // TODO: think about using symbols to hide these

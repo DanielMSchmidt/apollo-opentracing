@@ -111,8 +111,8 @@ If you need to take control of initializing the request span (e.g because you ne
 
 - `server`: Opentracing Tracer for the incoming request
 - `local`: Opentracing Tracer for the local and outgoing requests
-- `onFieldResolveFinish(error: Error | null, result: any, span: Span)`: Callback after a field was resolved
 - `onFieldResolve(source: any, args: { [argName: string]: any }, context: SpanContext, info: GraphQLResolveInfo)`: Allow users to add extra information to the span
+- `onFieldResolveFinish(error: Error | null, result: any, span: Span)`: Callback after a field was resolved
 - `shouldTraceRequest` & `shouldTraceFieldResolver`: See [Selective Tracing](#selective-tracing)
 - `onRequestResolve(span: Span, info: GraphQLRequestContext)`: Add extra information to the request span
 
@@ -147,6 +147,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
