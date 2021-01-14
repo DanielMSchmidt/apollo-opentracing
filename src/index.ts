@@ -40,6 +40,10 @@ export interface InitOptions<TContext> {
     span: Span,
     info: GraphQLRequestContext<TContext>
   ) => void;
+  createCustomSpanName?: (
+    name: string,
+    info: GraphQLResolveInfo,
+  ) => string;
 }
 
 export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
@@ -100,6 +104,7 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
   shouldTraceRequest = alwaysTrue,
   shouldTraceFieldResolver = alwaysTrue,
   onRequestResolve = emptyFunction,
+  createCustomSpanName = (name, _) => name,
 }: InitOptions<InstanceContext>): ApolloServerPlugin<InstanceContext> {
   if (!server) {
     throw new Error(
@@ -175,11 +180,13 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
               // idempotent method to add helpers to the first context available (which will be propagated by apollo)
               addContextHelpers(context);
 
-              const name = getFieldName(info);
+              let name = getFieldName(info);
               const parentSpan =
                 info.path && info.path.prev
                   ? context.getSpanByPath(info.path.prev)
                   : requestSpan;
+
+              name = createCustomSpanName(name, info);
 
               const span = localTracer.startSpan(name, {
                 childOf: parentSpan || undefined,
