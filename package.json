@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.20",
-    "@types/node": "14.14.21",
+    "@types/node": "14.14.22",
     "@types/supertest": "2.0.10",
     "all-contributors-cli": "6.19.0",
     "apollo-server": "2.19.2",
@@ -53,7 +53,7 @@
     "graphql-tools": "6.2.6",
     "jest": "26.6.3",
     "opentracing": "0.14.5",
-    "semantic-release": "17.3.2",
+    "semantic-release": "17.3.6",
     "supertest": "5.0.0",
     "travis-deploy-once": "5.0.11",
     "ts-jest": "26.4.4",
