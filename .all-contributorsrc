@@ -112,6 +112,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "RichardWright",
+      "name": "Richard W",
+      "avatar_url": "https://avatars.githubusercontent.com/u/881815?v=4",
+      "profile": "https://github.com/RichardWright",
+      "contributions": [
+        "ideas",
+        "research"
+      ]
     }
   ],
   "commitConvention": "none"

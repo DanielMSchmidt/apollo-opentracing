@@ -144,6 +144,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://app.sport-buddy.net"><img src="https://avatars3.githubusercontent.com/u/1945040?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tomáš Voslař</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=voslartomas" title="Code">💻</a></td>
     <td align="center"><a href="http://iam.benkimball.com/"><img src="https://avatars2.githubusercontent.com/u/40365?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ben Kimball</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=benkimball" title="Code">💻</a></td>
     <td align="center"><a href="https://jiapei.io/"><img src="https://avatars.githubusercontent.com/u/9281185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jiapei Liang</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=liangjiapei" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/RichardWright"><img src="https://avatars.githubusercontent.com/u/881815?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Richard W</b></sub></a><br /><a href="#ideas-RichardWright" title="Ideas, Planning, & Feedback">🤔</a> <a href="#research-RichardWright" title="Research">🔬</a></td>
   </tr>
 </table>
 
