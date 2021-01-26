@@ -186,8 +186,6 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
                   ? context.getSpanByPath(info.path.prev)
                   : requestSpan;
 
-              name = createCustomSpanName(name, info);
-
               const span = localTracer.startSpan(name, {
                 childOf: parentSpan || undefined,
               });
