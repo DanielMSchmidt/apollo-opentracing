@@ -180,7 +180,7 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
               // idempotent method to add helpers to the first context available (which will be propagated by apollo)
               addContextHelpers(context);
 
-              let name = getFieldName(info);
+              const name = createCustomSpanName(getFieldName(info), info);
               const parentSpan =
                 info.path && info.path.prev
                   ? context.getSpanByPath(info.path.prev)
