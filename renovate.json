@@ -1,6 +1,7 @@
 {
   "extends": ["config:base", ":semanticCommits"],
   "automerge": true,
+  "commitMessagePrefix": "fix:",
   "major": {
     "automerge": false
   }
