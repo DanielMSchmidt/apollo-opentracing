@@ -8,6 +8,9 @@ node_js:
   - "14"
   - "12"
   - "10"
+script:
+  - npm test
+  - commitlint-travis
 jobs:
   include:
     - stage: release
