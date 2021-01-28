@@ -103,6 +103,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "liangjiapei",
+      "name": "Jiapei Liang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9281185?v=4",
+      "profile": "https://jiapei.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "RichardWright",
+      "name": "Richard W",
+      "avatar_url": "https://avatars.githubusercontent.com/u/881815?v=4",
+      "profile": "https://github.com/RichardWright",
+      "contributions": [
+        "ideas",
+        "research"
+      ]
     }
   ],
   "commitConvention": "none"
