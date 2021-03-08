@@ -48,7 +48,7 @@
     "@types/node": "14.14.22",
     "@types/supertest": "2.0.10",
     "all-contributors-cli": "6.19.0",
-    "apollo-server": "2.19.2",
+    "apollo-server": "2.21.1",
     "apollo-server-env": "2.4.5",
     "express": "4.17.1",
     "graphql": "15.5.0",
