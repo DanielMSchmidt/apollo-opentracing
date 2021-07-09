@@ -5,6 +5,7 @@ import {
   GraphQLRequestListener,
   GraphQLRequestExecutionListener,
   GraphQLFieldResolverParams,
+  GraphQLRequestContextDidEncounterErrors,
 } from "apollo-server-plugin-base";
 import { DocumentNode, GraphQLResolveInfo } from "graphql";
 import { FORMAT_HTTP_HEADERS, Span, Tracer } from "opentracing";
@@ -44,6 +45,10 @@ export interface InitOptions<TContext> {
     name: string,
     info: GraphQLResolveInfo,
   ) => string;
+  onRequestError?: (
+    rootSpan: Span,
+    info: GraphQLRequestContextDidEncounterErrors<TContext>,
+  ) => void;
 }
 
 export interface ExtendedGraphQLResolveInfo extends GraphQLResolveInfo {
@@ -104,6 +109,7 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
   shouldTraceRequest = alwaysTrue,
   shouldTraceFieldResolver = alwaysTrue,
   onRequestResolve = emptyFunction,
+  onRequestError = emptyFunction,
   createCustomSpanName = (name, _) => name,
 }: InitOptions<InstanceContext>): ApolloServerPlugin<InstanceContext> {
   if (!server) {
@@ -203,6 +209,10 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
               };
             },
           };
+        },
+
+        didEncounterErrors: (requestContext) => {
+          onRequestError(rootSpan, requestContext)
         },
       };
     },
