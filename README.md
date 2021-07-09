@@ -116,6 +116,7 @@ If you need to take control of initializing the request span (e.g because you ne
 - `shouldTraceRequest` & `shouldTraceFieldResolver`: See [Selective Tracing](#selective-tracing)
 - `onRequestResolve(span: Span, info: GraphQLRequestContext)`: Add extra information to the request span
 - `createCustomSpanName(name: String, info: GraphQLResolveInfo)`: Allow users to provide customized span name
+- `onRequestError(rootSpan: Span, info: GraphQLRequestContextDidEncounterErrors)`: Callback when a request errors
 
 ## Contributing
 

@@ -123,6 +123,18 @@ request:1
 
 `;
 
+exports[`integration with apollo-server onRequestError 1`] = `
+request:1
+   finished: true
+   logs:
+   1. {"onRequestError":"yes"}
+
++-- e:2
+      finished: true
+
+
+`;
+
 exports[`integration with apollo-server onRequestResolve 1`] = `
 request:1
    finished: true

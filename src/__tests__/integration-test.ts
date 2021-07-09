@@ -171,6 +171,7 @@ function createApp<InstanceContext extends SpanContext>({
       type Query {
         a: A
         b: B
+        e: B
         as: [A]
         bs: [B]
       }
@@ -188,6 +189,9 @@ function createApp<InstanceContext extends SpanContext>({
           return {
             four: "4",
           };
+        },
+        e() {
+          return new Error('error!')
         },
 
         as() {
@@ -443,6 +447,30 @@ describe("integration with apollo-server", () => {
     const tree = buildSpanTree(tracer.spans);
     expect(tree).toMatchSnapshot();
     expect(onRequestResolve).toHaveBeenCalledTimes(1);
+  });
+
+  it("onRequestError", async () => {
+    const tracer = new MockTracer();
+    const onRequestError = jest.fn((span: any) => {
+      span.log({ onRequestError: "yes" });
+    });
+
+    const app = createApp({ tracer, onRequestError });
+    await request(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .send({
+        query: `query {
+          e {
+            four
+          }
+      }`,
+      })
+      .expect(200);
+
+    const tree = buildSpanTree(tracer.spans);
+    expect(tree).toMatchSnapshot();
+    expect(onRequestError).toHaveBeenCalledTimes(1);
   });
 
   it("picks up external spans", async () => {
