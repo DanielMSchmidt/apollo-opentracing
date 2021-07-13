@@ -147,6 +147,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://jiapei.io/"><img src="https://avatars.githubusercontent.com/u/9281185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jiapei Liang</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=liangjiapei" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/RichardWright"><img src="https://avatars.githubusercontent.com/u/881815?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Richard W</b></sub></a><br /><a href="#ideas-RichardWright" title="Ideas, Planning, & Feedback">🤔</a> <a href="#research-RichardWright" title="Research">🔬</a></td>
     <td align="center"><a href="https://github.com/leeweisberger"><img src="https://avatars.githubusercontent.com/u/6363419?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lee Weisberger</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/commits?author=leeweisberger" title="Code">💻</a></td>
+    <td align="center"><a href="https://starptech.de/"><img src="https://avatars.githubusercontent.com/u/1764424?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dustin Deus</b></sub></a><br /><a href="https://github.com/DanielMSchmidt/apollo-opentracing/issues?q=author%3AStarpTech" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

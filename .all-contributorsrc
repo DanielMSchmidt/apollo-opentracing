@@ -131,6 +131,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "StarpTech",
+      "name": "Dustin Deus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1764424?v=4",
+      "profile": "https://starptech.de/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "commitConvention": "none"
