@@ -44,7 +44,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "11.0.0",
     "@commitlint/travis-cli": "11.0.0",
-    "@types/jest": "26.0.20",
+    "@types/jest": "26.0.24",
     "@types/node": "14.14.22",
     "@types/supertest": "2.0.10",
     "all-contributors-cli": "6.19.0",
