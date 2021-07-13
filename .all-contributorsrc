@@ -122,6 +122,15 @@
         "ideas",
         "research"
       ]
+    },
+    {
+      "login": "leeweisberger",
+      "name": "Lee Weisberger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6363419?v=4",
+      "profile": "https://github.com/leeweisberger",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "commitConvention": "none"
