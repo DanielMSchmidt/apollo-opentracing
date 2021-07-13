@@ -32,14 +32,14 @@
   "author": "Daniel Schmidt <danielmschmidt92@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
+    "apollo-server": ">=2.0.0",
     "apollo-server-env": "*",
     "graphql": ">=0.10.x",
-    "opentracing": "*",
-    "apollo-server": ">=2.0.0"
+    "opentracing": "*"
   },
   "dependencies": {
-    "apollo-server-types": "^0.6.0",
-    "apollo-server-plugin-base": "^0.10.1"
+    "apollo-server-plugin-base": "^0.10.1",
+    "apollo-server-types": "^0.6.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
