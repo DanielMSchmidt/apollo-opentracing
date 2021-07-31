@@ -2,8 +2,6 @@ import { Request } from "apollo-server-env";
 import {
   ApolloServerPlugin,
   GraphQLRequestContext,
-  GraphQLRequestListener,
-  GraphQLRequestExecutionListener,
   GraphQLFieldResolverParams,
   GraphQLRequestContextDidEncounterErrors,
 } from "apollo-server-plugin-base";
@@ -128,9 +126,9 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
 
   let requestSpan: Span | null = null;
   return {
-    requestDidStart(
+    async requestDidStart(
       infos: GraphQLRequestContext<InstanceContext>
-    ): GraphQLRequestListener<InstanceContext> | void {
+    ) {
       addContextHelpers(infos.context);
       if (!requestIsInstanceContextRequest<InstanceContext>(infos)) {
         console.warn(
@@ -158,11 +156,11 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
       requestSpan = rootSpan;
 
       return {
-        willSendResponse() {
+        async willSendResponse() {
           rootSpan.finish();
         },
 
-        executionDidStart(): GraphQLRequestExecutionListener<InstanceContext> {
+        async executionDidStart() {
           return {
             willResolveField({
               source,
@@ -211,7 +209,7 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
           };
         },
 
-        didEncounterErrors: (requestContext) => {
+        didEncounterErrors: async (requestContext) => {
           onRequestError(rootSpan, requestContext)
         },
       };
