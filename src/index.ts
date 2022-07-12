@@ -41,13 +41,10 @@ export interface InitOptions<TContext> {
     span: Span,
     info: GraphQLRequestContext<TContext>
   ) => void;
-  createCustomSpanName?: (
-    name: string,
-    info: GraphQLResolveInfo,
-  ) => string;
+  createCustomSpanName?: (name: string, info: GraphQLResolveInfo) => string;
   onRequestError?: (
     rootSpan: Span,
-    info: GraphQLRequestContextDidEncounterErrors<TContext>,
+    info: GraphQLRequestContextDidEncounterErrors<TContext>
   ) => void;
 }
 
@@ -128,9 +125,9 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
 
   let requestSpan: Span | null = null;
   return {
-    requestDidStart(
+    async requestDidStart(
       infos: GraphQLRequestContext<InstanceContext>
-    ): GraphQLRequestListener<InstanceContext> | void {
+    ): Promise<GraphQLRequestListener<InstanceContext> | void> {
       addContextHelpers(infos.context);
       if (!requestIsInstanceContextRequest<InstanceContext>(infos)) {
         console.warn(
@@ -158,11 +155,13 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
       requestSpan = rootSpan;
 
       return {
-        willSendResponse() {
+        async willSendResponse() {
           rootSpan.finish();
         },
 
-        executionDidStart(): GraphQLRequestExecutionListener<InstanceContext> {
+        async executionDidStart(): Promise<
+          GraphQLRequestExecutionListener<InstanceContext>
+        > {
           return {
             willResolveField({
               source,
@@ -211,8 +210,8 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
           };
         },
 
-        didEncounterErrors: (requestContext) => {
-          onRequestError(rootSpan, requestContext)
+        didEncounterErrors: async (requestContext) => {
+          onRequestError(rootSpan, requestContext);
         },
       };
     },

@@ -147,7 +147,7 @@ class MockTracer {
   }
 }
 
-function createApp<InstanceContext extends SpanContext>({
+async function createApp<InstanceContext extends SpanContext>({
   tracer,
   ...params
 }: { tracer: MockTracer } & Omit<
@@ -191,7 +191,7 @@ function createApp<InstanceContext extends SpanContext>({
           };
         },
         e() {
-          return new Error('error!')
+          return new Error("error!");
         },
 
         as() {
@@ -215,12 +215,12 @@ function createApp<InstanceContext extends SpanContext>({
     plugins: [
       ApolloOpentracing({
         ...params,
-        server: (tracer as unknown) as Tracer,
-        local: (tracer as unknown) as Tracer,
+        server: tracer as unknown as Tracer,
+        local: tracer as unknown as Tracer,
       }),
     ],
   });
-
+  await server.start();
   server.applyMiddleware({ app });
 
   return app;
@@ -229,7 +229,7 @@ function createApp<InstanceContext extends SpanContext>({
 describe("integration with apollo-server", () => {
   it("closes all spans", async () => {
     const tracer = new MockTracer();
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -248,7 +248,7 @@ describe("integration with apollo-server", () => {
 
   it("correct span nesting", async () => {
     const tracer = new MockTracer();
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -280,7 +280,7 @@ describe("integration with apollo-server", () => {
       return true;
     };
 
-    const app = createApp({ tracer, shouldTraceFieldResolver });
+    const app = await createApp({ tracer, shouldTraceFieldResolver });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -303,7 +303,7 @@ describe("integration with apollo-server", () => {
 
   it("implements traces for arrays", async () => {
     const tracer = new MockTracer();
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -323,7 +323,7 @@ describe("integration with apollo-server", () => {
 
   it("alias works", async () => {
     const tracer = new MockTracer();
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -343,7 +343,7 @@ describe("integration with apollo-server", () => {
 
   it("alias with fragment works", async () => {
     const tracer = new MockTracer();
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -378,7 +378,11 @@ describe("integration with apollo-server", () => {
       }
     );
 
-    const app = createApp({ tracer, onFieldResolve, onFieldResolveFinish });
+    const app = await createApp({
+      tracer,
+      onFieldResolve,
+      onFieldResolveFinish,
+    });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -404,7 +408,7 @@ describe("integration with apollo-server", () => {
   it("shouldTraceRequest disables tracing", async () => {
     const tracer = new MockTracer();
     const shouldTraceRequest = jest.fn(() => false);
-    const app = createApp({ tracer, shouldTraceRequest });
+    const app = await createApp({ tracer, shouldTraceRequest });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -427,7 +431,7 @@ describe("integration with apollo-server", () => {
       span.log({ onRequestResolve: "yes" });
     });
 
-    const app = createApp({ tracer, onRequestResolve });
+    const app = await createApp({ tracer, onRequestResolve });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -455,7 +459,7 @@ describe("integration with apollo-server", () => {
       span.log({ onRequestError: "yes" });
     });
 
-    const app = createApp({ tracer, onRequestError });
+    const app = await createApp({ tracer, onRequestError });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
@@ -476,7 +480,7 @@ describe("integration with apollo-server", () => {
   it("picks up external spans", async () => {
     const tracer = new MockTracer();
 
-    const app = createApp({ tracer });
+    const app = await createApp({ tracer });
     await request(app)
       .post("/graphql")
       .set("Accept", "application/json")
