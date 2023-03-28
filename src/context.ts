@@ -1,6 +1,16 @@
 import { Span } from "opentracing";
 import { GraphQLResolveInfo, ResponsePath } from "graphql";
-import { GraphQLRequestContext } from "@apollo/server";
+import { ContextForApolloOpenTracing, WithRequiredSpanContext, hasSpanContext, addSpanContext } from './index';
+
+/**
+ * Object containing private methods that this library uses, that will be attatched to the GQL context object.
+ * (Will be namespaced using a symbol to hide this from users)
+ */
+export interface SpanContext {
+  getSpanByPath(info: ResponsePath): Span | undefined;
+  addSpan(span: Span, info: GraphQLResolveInfo): void;
+}
+
 function isArrayPath(path: ResponsePath) {
   return typeof path.key === "number";
 }
@@ -19,40 +29,23 @@ export function buildPath(path: ResponsePath | undefined) {
   return segments.reverse().join(".");
 }
 
-export interface SpanContext extends Object {
-  _spans: Map<string, Span>;
-  getSpanByPath(info: ResponsePath): Span | undefined;
-  addSpan(span: Span, info: GraphQLResolveInfo): void;
-  // Passed in from the outside context
-  requestSpan?: Span;
-}
-
-function isSpanContext(obj: any): obj is SpanContext {
-  return (
-    obj.getSpanByPath instanceof Function && obj.addSpan instanceof Function
-  );
-}
-
-export function requestIsInstanceContextRequest<CTX extends SpanContext>(
-  request: GraphQLRequestContext<CTX | Object>
-): request is GraphQLRequestContext<CTX> {
-  return isSpanContext(request.contextValue);
-}
-
-// TODO: think about using symbols to hide these
-export function addContextHelpers(obj: any): SpanContext {
-  if (isSpanContext(obj)) {
-    return obj;
+export function addContextHelpers<Context extends ContextForApolloOpenTracing>(
+  contextValue: Context
+): WithRequiredSpanContext<Context> {
+  if (hasSpanContext(contextValue)) {
+    return contextValue;
   }
 
-  obj._spans = new Map<string, Span>();
-  obj.getSpanByPath = function (path: ResponsePath): Span | undefined {
-    return this._spans.get(buildPath(isArrayPath(path) ? path.prev : path));
+  const spans = new Map<string, Span>();
+  const spanContext: SpanContext = {
+    getSpanByPath: (path: ResponsePath): Span | undefined => {
+      return spans.get(buildPath(isArrayPath(path) ? path.prev : path));
+    },
+    addSpan: (span: Span, info: GraphQLResolveInfo): void => {
+      spans.set(buildPath(info.path), span);
+    },
   };
 
-  obj.addSpan = function (span: Span, info: GraphQLResolveInfo): void {
-    this._spans.set(buildPath(info.path), span);
-  };
-
-  return obj;
+  addSpanContext(contextValue, spanContext);
+  return contextValue;
 }

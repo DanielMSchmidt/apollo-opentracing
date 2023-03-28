@@ -9,13 +9,51 @@ import {
 } from "@apollo/server";
 import { GraphQLResolveInfo } from "graphql";
 import { FORMAT_HTTP_HEADERS, Span, Tracer } from "opentracing";
-import {
-  addContextHelpers,
-  SpanContext,
-  requestIsInstanceContextRequest,
-} from "./context";
+import { addContextHelpers, SpanContext } from "./context";
 
 export { SpanContext, addContextHelpers };
+
+// used for sneakily attatching our SpanContext object to the application's GraphQL context object
+const spanContextSymbol: unique symbol = Symbol.for(
+  "apolloOpenTracingSpanContext"
+);
+
+/**
+ * The interface for the application's context object
+ */
+export interface ContextForApolloOpenTracing extends BaseContext {
+  // Initially empty - we will add this to the context object.
+  [spanContextSymbol]?: SpanContext;
+  // May be specified by users when creating their context object
+  requestSpan?: Span;
+}
+
+/**
+ * Our version of the application's context object (with the span context provided)
+ */
+export type WithRequiredSpanContext<T> = T & {
+  [spanContextSymbol]: SpanContext;
+};
+
+/**
+ * Does a GraphQL context object already contain a SpanContext property?
+ */
+export function hasSpanContext<Context extends object>(
+  contextValue: Context
+): contextValue is WithRequiredSpanContext<Context> {
+  return spanContextSymbol in contextValue;
+}
+
+/**
+ * Attaches a SpanContext property to a GraphQL context object.
+ * (Has a side effect by mutating contextValue.)
+ */
+export function addSpanContext<Context extends ContextForApolloOpenTracing>(
+  contextValue: Context,
+  spanContext: SpanContext
+): asserts contextValue is WithRequiredSpanContext<Context> {
+  contextValue[spanContextSymbol] = spanContext;
+}
 
 const alwaysTrue = () => true;
 const emptyFunction = () => {};
@@ -27,14 +65,14 @@ export interface InitOptions<TContext extends BaseContext> {
   onFieldResolve?: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => void;
   shouldTraceRequest?: (info: GraphQLRequestContext<TContext>) => boolean;
   shouldTraceFieldResolver?: (
     source: any,
     args: { [argName: string]: any },
-    context: SpanContext,
+    context: TContext,
     info: GraphQLResolveInfo
   ) => boolean;
   onRequestResolve?: (
@@ -83,7 +121,7 @@ function headersToOject(
   return headers;
 }
 
-export default function OpentracingPlugin<InstanceContext extends SpanContext>({
+export default function OpentracingPlugin<InstanceContext extends ContextForApolloOpenTracing>({
   server,
   local,
   onFieldResolveFinish = emptyFunction,
@@ -114,12 +152,6 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
       infos: GraphQLRequestContext<InstanceContext>
     ): Promise<GraphQLRequestListener<InstanceContext> | void> {
       addContextHelpers(infos.contextValue);
-      if (!requestIsInstanceContextRequest<InstanceContext>(infos)) {
-        console.warn(
-          "Context in request passed to apollo-opentracing#requestDidStart is not a SpanContext, aborting tracing"
-        );
-        return;
-      }
       if (!shouldTraceRequest(infos)) {
         return;
       }
@@ -154,6 +186,13 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
               contextValue,
               info,
             }: GraphQLFieldResolverParams<any, InstanceContext>) {
+              if (!hasSpanContext(contextValue)) {
+                console.warn(
+                  "Context in request passed to apollo-opentracing#willResolveField is not a SpanContext, aborting tracing"
+                );
+                return;
+              }
+
               if (
                 // we don't trace the request
                 !requestSpan ||
@@ -162,7 +201,7 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
                 // the previous resolver was not traced
                 (info.path &&
                   info.path.prev &&
-                  !contextValue.getSpanByPath(info.path.prev))
+                  !contextValue[spanContextSymbol].getSpanByPath(info.path.prev))
               ) {
                 return;
               }
@@ -173,14 +212,14 @@ export default function OpentracingPlugin<InstanceContext extends SpanContext>({
               const name = createCustomSpanName(getFieldName(info), info);
               const parentSpan =
                 info.path && info.path.prev
-                  ? contextValue.getSpanByPath(info.path.prev)
+                  ? contextValue[spanContextSymbol].getSpanByPath(info.path.prev)
                   : requestSpan;
 
               const span = localTracer.startSpan(name, {
                 childOf: parentSpan || undefined,
               });
 
-              contextValue.addSpan(span, info);
+              contextValue[spanContextSymbol].addSpan(span, info);
               // expose to field (although type does not contain it)
               (info as any).span = span;
 
