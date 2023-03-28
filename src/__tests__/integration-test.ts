@@ -1,6 +1,8 @@
 import * as express from "express";
 import * as request from "supertest";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from '@apollo/server/express4';
+import { json } from 'body-parser';
 import { Tracer } from "opentracing";
 import { MockSpan, MockSpanTree } from "../test/types";
 import spanSerializer from "../test/span-serializer";
@@ -156,7 +158,7 @@ async function createApp<InstanceContext extends SpanContext>({
 >) {
   const app = express();
 
-  const server = new ApolloServer({
+  const server = new ApolloServer<any>({
     typeDefs: `
       type A {
         one: String
@@ -221,7 +223,7 @@ async function createApp<InstanceContext extends SpanContext>({
     ],
   });
   await server.start();
-  server.applyMiddleware({ app });
+  app.use('/graphql', json(), expressMiddleware(server));
 
   return app;
 }

@@ -91,7 +91,7 @@ Sometimes you don't want to trace everything, so we provide ways to select if yo
 If you construct the extension with `shouldTraceRequest` you get the option to opt-in or out on a request basis.
 When you don't start the span for the request the field resolvers will also not be used.
 
-The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/master/packages/graphql-extensions/src/index.ts#L35).
+The function is called with the same arguments as the `requestDidStart` function extensions can provide, which is documented [here](https://github.com/apollographql/apollo-server/blob/a1d549e/packages/server/src/externalTypes/plugins.ts#L52).
 
 When the request is not traced there will also be no traces of the field resolvers.
 
@@ -101,7 +101,7 @@ There might be certain field resolvers that are not worth the tracing, e.g. when
 
 ## Modifying span metadata
 
-If you'd like to add custom tags or logs to span you can construct the extension with `onRequestResolve`. The function is called with two arguments: span and infos `onRequestResolve?: (span: Span, info: RequestStart)`
+If you'd like to add custom tags or logs to span you can construct the extension with `onRequestResolve`. The function is called with two arguments: span and infos `onRequestResolve?: (span: Span, info: GraphQLRequestContext)`
 
 ## Using your own request span
 
