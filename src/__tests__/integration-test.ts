@@ -1,10 +1,12 @@
 import * as express from "express";
 import * as request from "supertest";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from '@apollo/server/express4';
+import { json } from 'body-parser';
 import { Tracer } from "opentracing";
 import { MockSpan, MockSpanTree } from "../test/types";
 import spanSerializer from "../test/span-serializer";
-import ApolloOpentracing, { InitOptions, SpanContext } from "../";
+import ApolloOpentracing, { InitOptions } from "../";
 
 expect.addSnapshotSerializer(spanSerializer);
 
@@ -147,16 +149,18 @@ class MockTracer {
   }
 }
 
-async function createApp<InstanceContext extends SpanContext>({
+interface EmptyContext {}
+
+async function createApp({
   tracer,
   ...params
 }: { tracer: MockTracer } & Omit<
-  InitOptions<InstanceContext>,
+  InitOptions<EmptyContext>,
   "server" | "local"
 >) {
   const app = express();
 
-  const server = new ApolloServer({
+  const server = new ApolloServer<EmptyContext>({
     typeDefs: `
       type A {
         one: String
@@ -221,12 +225,12 @@ async function createApp<InstanceContext extends SpanContext>({
     ],
   });
   await server.start();
-  server.applyMiddleware({ app });
+  app.use('/graphql', json(), expressMiddleware(server));
 
   return app;
 }
 
-describe("integration with apollo-server", () => {
+describe("integration with @apollo/server", () => {
   it("closes all spans", async () => {
     const tracer = new MockTracer();
     const app = await createApp({ tracer });

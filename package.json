@@ -32,26 +32,21 @@
   "author": "Daniel Schmidt <danielmschmidt92@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "apollo-server": ">=3.0.0",
-    "apollo-server-env": "*",
+    "@apollo/server": ">=4.0.0",
     "graphql": ">=0.10.x",
     "opentracing": "*"
   },
-  "dependencies": {
-    "apollo-server-plugin-base": "^3.0.0",
-    "apollo-server-types": "^3.0.0"
-  },
   "devDependencies": {
+    "@apollo/server": "4.5.0",
     "@commitlint/config-conventional": "11.0.0",
     "@commitlint/travis-cli": "11.0.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.18.38",
     "@types/supertest": "2.0.12",
     "all-contributors-cli": "6.24.0",
-    "apollo-server": "3.12.0",
-    "apollo-server-env": "4.2.1",
     "express": "4.18.2",
-    "graphql": "15.8.0",
+    "body-parser": "^1.20.2",
+    "graphql": "16.6.0",
     "graphql-tools": "6.2.6",
     "jest": "27.5.1",
     "opentracing": "0.14.7",

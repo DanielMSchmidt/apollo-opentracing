@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`integration with apollo-server alias with fragment works 1`] = `
+exports[`integration with @apollo/server alias with fragment works 1`] = `
 request:1
    finished: true
 
@@ -13,7 +13,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server alias works 1`] = `
+exports[`integration with @apollo/server alias works 1`] = `
 request:1
    finished: true
 
@@ -29,7 +29,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server correct span nesting 1`] = `
+exports[`integration with @apollo/server correct span nesting 1`] = `
 request:1
    finished: true
 
@@ -45,7 +45,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server does not start a field resolver span if the parent field resolver was not traced 1`] = `
+exports[`integration with @apollo/server does not start a field resolver span if the parent field resolver was not traced 1`] = `
 request:1
    finished: true
 
@@ -58,7 +58,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server implements traces for arrays 1`] = `
+exports[`integration with @apollo/server implements traces for arrays 1`] = `
 request:1
    finished: true
 
@@ -86,7 +86,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server onFieldResolve & onFieldResolveFinish 1`] = `
+exports[`integration with @apollo/server onFieldResolve & onFieldResolveFinish 1`] = `
 request:1
    finished: true
 
@@ -123,7 +123,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server onRequestError 1`] = `
+exports[`integration with @apollo/server onRequestError 1`] = `
 request:1
    finished: true
    logs:
@@ -135,7 +135,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server onRequestResolve 1`] = `
+exports[`integration with @apollo/server onRequestResolve 1`] = `
 request:1
    finished: true
    logs:
@@ -159,7 +159,7 @@ request:1
 
 `;
 
-exports[`integration with apollo-server picks up external spans 1`] = `
+exports[`integration with @apollo/server picks up external spans 1`] = `
 external:-1
    finished: false
 
