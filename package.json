@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "11.0.0",
-    "@commitlint/travis-cli": "11.0.0",
+    "@commitlint/travis-cli": "17.0.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.18.38",
     "@types/supertest": "2.0.12",
@@ -55,7 +55,7 @@
     "graphql-tools": "6.2.6",
     "jest": "27.5.1",
     "opentracing": "0.14.7",
-    "semantic-release": "19.0.5",
+    "semantic-release": "20.0.1",
     "supertest": "5.0.0",
     "travis-deploy-once": "5.0.11",
     "ts-jest": "27.0.4",
