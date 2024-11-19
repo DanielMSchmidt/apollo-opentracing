@@ -42,8 +42,8 @@
     "apollo-server-types": "^3.0.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "11.0.0",
-    "@commitlint/travis-cli": "17.0.0",
+    "@commitlint/config-conventional": "19.6.0",
+    "@commitlint/travis-cli": "19.6.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.18.38",
     "@types/supertest": "2.0.12",
