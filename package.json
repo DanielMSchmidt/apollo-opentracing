@@ -46,7 +46,7 @@
     "@commitlint/travis-cli": "17.0.0",
     "@types/jest": "26.0.24",
     "@types/node": "14.18.38",
-    "@types/supertest": "2.0.12",
+    "@types/supertest": "2.0.16",
     "all-contributors-cli": "6.24.0",
     "apollo-server": "3.13.0",
     "apollo-server-env": "4.2.1",
