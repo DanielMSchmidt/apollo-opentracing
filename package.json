@@ -38,7 +38,7 @@
     "opentracing": "*"
   },
   "dependencies": {
-    "apollo-server-plugin-base": "^3.0.0",
+    "@apollo/server": "^4.0.0",
     "apollo-server-types": "^3.0.0"
   },
   "devDependencies": {
