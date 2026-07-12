@@ -32,7 +32,7 @@
   "author": "Daniel Schmidt <danielmschmidt92@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "apollo-server": ">=3.0.0",
+    "@apollo/server": ">=3.0.0",
     "apollo-server-env": "*",
     "graphql": ">=0.10.x",
     "opentracing": "*"
@@ -48,7 +48,7 @@
     "@types/node": "14.18.63",
     "@types/supertest": "2.0.16",
     "all-contributors-cli": "6.26.1",
-    "apollo-server": "3.13.0",
+    "@apollo/server": "4.0.0",
     "apollo-server-env": "4.2.1",
     "express": "4.22.2",
     "graphql": "15.10.2",
